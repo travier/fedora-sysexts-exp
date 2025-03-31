@@ -543,6 +543,21 @@ jobs:
           just build ${IMAGE} ${ARCH}
           mv "${SYSEXT}"*".raw" "../artifacts/"
 
+      - name: "Build sysext: source-foundry-hack-fonts"
+        env:
+          SYSEXT: source-foundry-hack-fonts
+        run: |
+          cd "${SYSEXT}"
+          if [[ "${PR}" == "true" ]]; then
+              diff="$(git diff origin/main HEAD --stat -- . ; git diff origin/main HEAD --stat -- ../sysext.just)"
+              if [[ -z "${diff}" ]]; then
+                  echo "Skipping: No changes for this sysext in this PR"
+                  exit 0
+              fi
+          fi
+          just build ${IMAGE} ${ARCH}
+          mv "${SYSEXT}"*".raw" "../artifacts/"
+
       - name: "Build sysext: steam-devices"
         env:
           SYSEXT: steam-devices
