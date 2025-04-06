@@ -236,6 +236,8 @@ download-rpms target arch=arch:
         "{{target}}" \
         bash -c "export FORCE_COLUMNS=100 && ${pre_commands}dnf download --resolve ${dnf_arch} ${dnf_opts} ${disablerepos} ${enablerepos} ${packages}"
 
+    sha256sum *.rpm >> ../inputs
+
 # Manual download step, that can be overridden to dowload non RPM content
 download-manual arch=arch:
     #!/bin/bash
@@ -347,6 +349,10 @@ install-files:
     else
         SUDO="sudo"
     fi
+
+    for f in {{files}}; do
+        find ${f} -type f | sort -h | xargs sha256sum >> ./inputs
+    done
 
     cd rootfs
 
@@ -489,6 +495,11 @@ build-erofs target arch=arch:
         ${SUDO} chown "${USER}:" {{name}}*.raw
     fi
 
+    podman inspect {{target}} | jq -r '.[0].Digest' > digest
+    sha256sum justfile >> scripts
+    cd ..
+    sha256sum sysext.just >> {{name}}/scripts
+
     echo "🎉 Done!"
 
 # Clean up files from previous builds
@@ -504,6 +515,7 @@ clean:
     fi
 
     echo "🧹 Cleaning up files from previous builds"
+    rm -rf inputs scripts digest
     rm -rf ./rpms
     rm -rf ./binaries
     ${SUDO} rm -rf ./rootfs ./rootfs.ignored
