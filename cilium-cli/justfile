@@ -33,6 +33,10 @@ download-manual arch=arch:
 
     curl -L --fail --remote-name-all "https://github.com/cilium/cilium-cli/raw/refs/tags/${VERSION}/LICENSE"
 
+    # Metadata
+    echo "${VERSION#v}" > ../version
+    sha256sum cilium-linux-${ARCH}.tar.gz LICENSE >> ../inputs
+
 # Custom installation step to install the binary
 install-manual:
     #!/bin/bash
