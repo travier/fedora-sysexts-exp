@@ -133,3 +133,28 @@ jobs:
             "${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}" \
             --latest=false \
             ./*.raw ./SHA256SUMS
+
+          releases=(
+            $(
+              gh release list --json tagName \
+                | jq -r '.[].tagName' \
+                | grep "^${SYSEXT}" \
+                | grep -v latest \
+                | sort -h
+            )
+          )
+
+          echo ${releases[@]}
+          exit 0
+          {
+          for rel in ${releases[@]}; do
+            curl --location https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS
+          done
+          } > SHA256SUMS
+
+          gh release create \
+            --title "${SYSEXT} for Fedora" \
+            --notes-file notes \
+            "${SYSEXT}-latest" \
+            --latest=false \
+            ./SHA256SUMS
