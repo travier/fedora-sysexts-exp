@@ -236,6 +236,7 @@ download-rpms target arch=arch:
         "{{target}}" \
         bash -c "export FORCE_COLUMNS=100 && ${pre_commands}dnf download --resolve ${dnf_arch} ${dnf_opts} ${disablerepos} ${enablerepos} ${packages}"
 
+    # Store the hashes of the RPMs used to build the sysext
     sha256sum *.rpm >> ../inputs
 
 # Manual download step, that can be overridden to dowload non RPM content
@@ -510,7 +511,10 @@ build-erofs target arch=arch:
         ${SUDO} chown "${USER}:" {{name}}*.raw
     fi
 
-    podman inspect {{target}} | jq -r '.[0].Digest' > digest
+    # Get and store name, tag and digest for the container image used to build the sysext
+    echo "{{target}}@$(podman inspect {{target}} | jq -r '.[0].Digest')" > digest
+
+    # Store the hashes of the scripts used to build the sysext
     sha256sum justfile >> scripts
     cd ..
     sha256sum sysext.just >> {{name}}/scripts
