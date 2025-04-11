@@ -120,6 +120,30 @@ jobs:
           echo "\`\`\`"
           } > notes
 
+          release=(
+            $(
+              gh release list --json tagName \
+                | jq -r '.[].tagName' \
+                | grep "^${SYSEXT}" \
+                | grep "^${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}$" \
+                | sort -h
+            )
+          )
+          if [[ -n "${release}" ]]; then
+            echo "Fetching info from existing release: ${release}"
+            curl --location --output digest.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/digest"
+            curl --location --output inputs.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/inputs"
+            curl --location --output scripts.old "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/scripts"
+
+            new=$(cat digest inputs scripts | sha256sum)
+            old=$(cat digest.old inputs.old scripts.old | sha256sum)
+
+            if [[ "${new}" == "${old}" ]]; then
+              echo "No changes in inputs since last release. Skipping."
+              exit 0
+            fi
+          fi
+
           gh release delete \
             --cleanup-tag \
             --yes \
