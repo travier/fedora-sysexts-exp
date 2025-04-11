@@ -47,7 +47,7 @@ jobs:
           context: .github
           image: ${{ env.NAME }}
           tags: latest-x86_64
-          containerfiles: .github/Containerfile
+          containerfiles: .github/Containerfile.buildroot
           layers: false
           oci: true
 
@@ -74,7 +74,7 @@ jobs:
           context: .github
           image: ${{ env.NAME }}
           tags: latest-aarch64
-          containerfiles: .github/Containerfile
+          containerfiles: .github/Containerfile.buildroot
           layers: false
           oci: true
 
