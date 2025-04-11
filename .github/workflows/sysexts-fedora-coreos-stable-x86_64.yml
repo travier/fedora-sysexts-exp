@@ -99,26 +99,20 @@ jobs:
           VERSION="$(cat ./version)"
 
           {
-          echo "Built using container image \`${IMAGE}\` with digest:"
+          echo "Built using container image:"
           echo "\`\`\`"
           cat ./digest
           echo "\`\`\`"
-
-          if [[ -f ./rpms ]]; then
-            echo ""
-            echo "Built using RPMs:"
-            echo "\`\`\`"
-            cat ./rpms
-            echo "\`\`\`"
-          fi
-
-          if [[ -f ./inputs ]]; then
-            echo ""
-            echo "Built using input files:"
-            echo "\`\`\`"
-            cat ./inputs
-            echo "\`\`\`"
-          fi
+          echo ""
+          echo "Built using input files:"
+          echo "\`\`\`"
+          cat ./inputs
+          echo "\`\`\`"
+          echo ""
+          echo "Built using scripts:"
+          echo "\`\`\`"
+          cat ./scripts
+          echo "\`\`\`"
           } > notes
 
           gh release delete \
@@ -132,7 +126,7 @@ jobs:
             --notes-file notes \
             "${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}" \
             --latest=false \
-            ./*.raw ./SHA256SUMS
+            ./*.raw ./SHA256SUMS ./inputs ./scripts ./digest
 
           releases=(
             $(
@@ -144,13 +138,13 @@ jobs:
             )
           )
 
-          echo ${releases[@]}
-          exit 0
-          {
+          echo "Looking at releases: ${releases[@]}"
           for rel in ${releases[@]}; do
-            curl --location https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS
+            echo "Fetching SHA256SUMS for release: ${rel}"
+            curl --location --output "SHA256SUMS.${rel}" \
+              "https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS"
           done
-          } > SHA256SUMS
+          ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
 
           gh release create \
             --title "${SYSEXT} for Fedora" \
