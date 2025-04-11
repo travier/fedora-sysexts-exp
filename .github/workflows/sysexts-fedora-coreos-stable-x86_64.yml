@@ -99,6 +99,11 @@ jobs:
           VERSION="$(cat ./version)"
 
           {
+          echo "Release:"
+          echo "\`\`\`"
+          cat ./SHA256SUMS
+          echo "\`\`\`"
+          echo ""
           echo "Built using container image:"
           echo "\`\`\`"
           cat ./digest
@@ -145,6 +150,19 @@ jobs:
               "https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS"
           done
           ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
+
+          {
+          echo "Releases available:"
+          echo "\`\`\`"
+          cat ./SHA256SUMS
+          echo "\`\`\`"
+          } > notes
+
+          gh release delete \
+            --cleanup-tag \
+            --yes \
+            "${SYSEXT}-latest" \
+            || true
 
           gh release create \
             --title "${SYSEXT} for Fedora" \
