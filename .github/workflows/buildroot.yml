@@ -48,7 +48,6 @@ jobs:
           image: ${{ env.NAME }}
           tags: latest-x86_64
           containerfiles: .github/Containerfile.buildroot
-          layers: false
           oci: true
 
       - name: Push to Container Registry
@@ -75,7 +74,6 @@ jobs:
           image: ${{ env.NAME }}
           tags: latest-aarch64
           containerfiles: .github/Containerfile.buildroot
-          layers: false
           oci: true
 
       - name: Push to Container Registry
