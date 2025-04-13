@@ -145,7 +145,7 @@ jobs:
               || true
 
             gh release create \
-              --title "${SYSEXT} ${VERSION} for Fedora ${VERSION_ID} (${ARCH})" \
+              --title "${SYSEXT} ${VERSION} for Fedora ${VERSION_ID} (${arch})" \
               --notes-file notes \
               "${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}" \
               --latest=false \
@@ -267,7 +267,7 @@ jobs:
               || true
 
             gh release create \
-              --title "${SYSEXT} ${VERSION} for Fedora ${VERSION_ID} (${ARCH})" \
+              --title "${SYSEXT} ${VERSION} for Fedora ${VERSION_ID} (${arch})" \
               --notes-file notes \
               "${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}" \
               --latest=false \
@@ -286,6 +286,14 @@ jobs:
     # Still run if any dependent job fails
     if: ${{ always() }}
     steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+
+      - name: "Mark directory as safe"
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+
       - name: "Update latest release for sysext: cilium-cli"
         env:
           SYSEXT: cilium-cli
@@ -293,7 +301,13 @@ jobs:
         run: |
           set -euxo pipefail
 
-          # rm -f SHA256SUMS*
+          arch="$(uname --machine)"
+          if [[ "${arch}" == "x86_64" ]]; then
+              arch="x86-64"
+          else
+              arch="aarch64"
+          fi
+
           releases=(
             $(
               gh release list --json tagName \
@@ -361,12 +375,26 @@ jobs:
     # Still run if any dependent job fails
     if: ${{ always() }}
     steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+
+      - name: "Mark directory as safe"
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+
       - name: "Update latest release for all sysexts"
         if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
         run: |
           set -euxo pipefail
 
-          # rm -f SHA256SUMS*
+          arch="$(uname --machine)"
+          if [[ "${arch}" == "x86_64" ]]; then
+              arch="x86-64"
+          else
+              arch="aarch64"
+          fi
+
           releases=(
             $(
               gh release list --json tagName \
@@ -403,7 +431,7 @@ jobs:
 
             for rel in ${releases[@]}; do
               s="${rel%-latest}"
-              sed "s/%%SYSEXT%%/${s}/g" ../.workflow-templates/systemd-sysupdate.conf > ${s}.conf
+              sed "s/%%SYSEXT%%/${s}/g" .workflow-templates/systemd-sysupdate.conf > ${s}.conf
             done
 
             {
