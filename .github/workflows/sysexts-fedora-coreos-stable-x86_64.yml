@@ -72,6 +72,11 @@ jobs:
 
           git config --global --add safe.directory "${PWD}"
 
+          # Redefine grep to not fail when there are no matches
+          grep() {
+            /usr/bin/grep "$@" || test $? = 1
+          }
+
           cd "${SYSEXT}"
           sha256sum *.raw > SHA256SUMS
 
@@ -94,7 +99,7 @@ jobs:
           release="$(
             gh release list --json tagName \
               | jq -r '.[].tagName' \
-              | { grep "^${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}$" || true }
+              | grep "^${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}$"
           )"
           if [[ -n "${release}" ]]; then
             echo "Fetching info from existing release: ${release}"
@@ -169,7 +174,7 @@ jobs:
           release="$(
             gh release list --json tagName \
               | jq -r '.[].tagName' \
-              | { grep "^${SYSEXT}-latest$" || true }
+              | grep "^${SYSEXT}-latest$"
           )"
           if [[ -n "${release}" ]]; then
             echo "Fetching SHA256SUMS from existing release: ${release}"
@@ -226,7 +231,7 @@ jobs:
           release="$(
             gh release list --json tagName \
               | jq -r '.[].tagName' \
-              | { grep "^latest$" || true }
+              | grep "^latest$"
           )"
           if [[ -n "${release}" ]]; then
             echo "Fetching SHA256SUMS from existing release: ${release}"
