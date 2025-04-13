@@ -91,16 +91,17 @@ jobs:
           new=$(cat digest inputs scripts | sha256sum)
 
           old=""
-          release="$(gh release list --json tagName \
-            | jq -r '.[].tagName' \
-            | grep "^${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}$"
-          )
+          release="$(
+            gh release list --json tagName \
+              | jq -r '.[].tagName' \
+              | grep "^${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}$"
+          )"
           if [[ -n "${release}" ]]; then
             echo "Fetching info from existing release: ${release}"
             curl --location --output digest.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/digest"
             curl --location --output inputs.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/inputs"
             curl --location --output scripts.old "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/scripts"
-            old=$(cat digest.old inputs.old scripts.old | sha256sum)
+            old="$(cat digest.old inputs.old scripts.old | sha256sum)"
           fi
 
           if [[ "${new}" == "${old}" ]]; then
@@ -161,14 +162,14 @@ jobs:
               "https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS"
           done
           ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
-          new=$(cat SHA256SUMS)
+          new="$(cat SHA256SUMS)"
 
           old=""
-          release=$(gh release list --json tagName \
-            | jq -r '.[].tagName' \
-            | grep "^${SYSEXT}-latest$" \
-            )
-          )
+          release="$(
+            gh release list --json tagName \
+              | jq -r '.[].tagName' \
+              | grep "^${SYSEXT}-latest$"
+          )"
           if [[ -n "${release}" ]]; then
             echo "Fetching SHA256SUMS from existing release: ${release}"
             curl --location --output SHA256SUMS.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/SHA256SUMS"
@@ -201,12 +202,12 @@ jobs:
               ./SHA256SUMS
           fi
 
-          echo Updating latest release for all sysexts
+          echo "Updating latest release for all sysexts"
           releases=(
             $(
               gh release list --json tagName \
                 | jq -r '.[].tagName' \
-                | grep "-latest" \
+                | grep -- "-latest$" \
                 | sort -h
             )
           )
@@ -220,11 +221,11 @@ jobs:
           new=$(cat SHA256SUMS)
 
           old=""
-          release=$(gh release list --json tagName \
-            | jq -r '.[].tagName' \
-            | grep "^latest$" \
-            )
-          )
+          release="$(
+            gh release list --json tagName \
+              | jq -r '.[].tagName' \
+              | grep "^latest$"
+          )"
           if [[ -n "${release}" ]]; then
             echo "Fetching SHA256SUMS from existing release: ${release}"
             curl --location --output SHA256SUMS.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/SHA256SUMS"
