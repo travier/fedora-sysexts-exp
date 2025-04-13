@@ -16,6 +16,7 @@ runs:
         SYSEXT: ${{ inputs.sysext }}
         IMAGE: ${{ inputs.image }}
         PR: ${{ github.event_name == 'pull_request' }}
+      shell: bash
       run: |
         set -euxo pipefail
 
@@ -35,6 +36,7 @@ runs:
         SYSEXT: ${{ inputs.sysext }}
         GH_TOKEN: ${{ github.token }}
       if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+      shell: bash
       run: |
         set -euxo pipefail
 
