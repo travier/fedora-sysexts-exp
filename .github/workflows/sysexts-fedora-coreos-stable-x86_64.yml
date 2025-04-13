@@ -244,6 +244,11 @@ jobs:
           else
             echo "Creating new release: latest"
 
+            for rel in ${releases[@]}; do
+              s="${rel%-latest}"
+              sed "s/%%SYSEXT%%/${s}/g" ../.workflow-templates/systemd-sysupdate.conf > ${s}.conf
+            done
+
             {
             echo "Releases available:"
             echo "\`\`\`"
@@ -262,5 +267,5 @@ jobs:
               --notes-file notes \
               "latest" \
               --latest=true \
-              ./SHA256SUMS
+              ./SHA256SUMS ./*.conf
           fi
