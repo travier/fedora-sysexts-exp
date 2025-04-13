@@ -88,7 +88,7 @@ jobs:
           VERSION="$(cat ./version)"
 
           echo "Updating release for this sysext"
-          new=$(cat digest inputs scripts | sha256sum)
+          new="$(cat digest inputs scripts | sha256sum)"
 
           old=""
           release="$(
@@ -220,7 +220,7 @@ jobs:
               "https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS"
           done
           ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
-          new=$(cat SHA256SUMS | sha256sum)
+          new="$(cat SHA256SUMS | sha256sum)"
 
           old=""
           release="$(
