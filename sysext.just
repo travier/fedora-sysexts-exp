@@ -64,6 +64,7 @@ build target arch=arch: \
     clean \
     (download-rpms target arch) \
     (download-manual arch) \
+    version \
     (setup-rootfs target arch) \
     install-rpms \
     install-files \
@@ -241,6 +242,13 @@ download-rpms target arch=arch:
 
 # Manual download step, that can be overridden to dowload non RPM content
 download-manual arch=arch:
+    #!/bin/bash
+    set -euo pipefail
+    # set -x
+    exit 0
+
+# Recipe to override to set a custom version
+version:
     #!/bin/bash
     set -euo pipefail
     # set -x
