@@ -1,0 +1,79 @@
+name: "Publish 'latest' release with all sysexts"
+description: "Publish the 'latest' release that references all available sysexts"
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Publish 'latest' release"
+      env:
+        GH_TOKEN: ${{ github.token }}
+      if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+      run: |
+        set -euxo pipefail
+
+        arch="$(uname --machine)"
+        if [[ "${arch}" == "x86_64" ]]; then
+            arch="x86-64"
+        else
+            arch="aarch64"
+        fi
+
+        releases=(
+          $(
+            gh release list --json tagName \
+              | jq -r '.[].tagName' \
+              | grep -- "-latest$" \
+              | sort -h
+          )
+        )
+        echo "Looking at releases: ${releases[@]}"
+        for rel in ${releases[@]}; do
+          echo "Fetching SHA256SUMS for release: ${rel}"
+          curl --location --output "SHA256SUMS.${rel}" \
+            "https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS"
+        done
+        ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
+        new="$(cat SHA256SUMS | sha256sum)"
+
+        old=""
+        release="$(
+          gh release list --json tagName \
+            | jq -r '.[].tagName' \
+            | grep "^latest$"
+        )"
+        if [[ -n "${release}" ]]; then
+          echo "Fetching SHA256SUMS from existing release: ${release}"
+          curl --location --output SHA256SUMS.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/SHA256SUMS"
+          old="$(cat SHA256SUMS.old | sha256sum)"
+        fi
+
+        if [[ "${new}" == "${old}" ]]; then
+          echo "No changes for ${release} since last release. Skipping."
+        else
+          echo "Creating new release: latest"
+
+          for rel in ${releases[@]}; do
+            s="${rel%-latest}"
+            sed "s/%%SYSEXT%%/${s}/g" .workflow-templates/systemd-sysupdate.conf > ${s}.conf
+          done
+
+          {
+          echo "Releases available:"
+          echo "\`\`\`"
+          cat ./SHA256SUMS
+          echo "\`\`\`"
+          } > notes
+
+          gh release delete \
+            --cleanup-tag \
+            --yes \
+            "latest" \
+            || true
+
+          gh release create \
+            --title "System extensions for Fedora" \
+            --notes-file notes \
+            "latest" \
+            --latest=true \
+            ./SHA256SUMS ./*.conf
+        fi

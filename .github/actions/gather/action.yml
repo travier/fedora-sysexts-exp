@@ -1,0 +1,80 @@
+name: "Gather versions for a sysext"
+description: "Gather all versions for a sysext and publish a 'latest' release for it"
+inputs:
+  sysext:
+    description: "The sysext to work on"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Gather versions for a sysext"
+      env:
+        SYSEXT: ${{ inputs.sysext }}
+        GH_TOKEN: ${{ github.token }}
+      if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+      run: |
+        set -euxo pipefail
+
+        arch="$(uname --machine)"
+        if [[ "${arch}" == "x86_64" ]]; then
+            arch="x86-64"
+        else
+            arch="aarch64"
+        fi
+
+        releases=(
+          $(
+            gh release list --json tagName \
+              | jq -r '.[].tagName' \
+              | grep "^${SYSEXT}-" \
+              | grep -v "${SYSEXT}-latest$" \
+              | sort -h
+          )
+        )
+        echo "Looking at releases: ${releases[@]}"
+        for rel in ${releases[@]}; do
+          echo "Fetching SHA256SUMS for release: ${rel}"
+          curl --location --output "SHA256SUMS.${rel}" \
+            "https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS"
+        done
+        ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
+        new="$(cat SHA256SUMS | sha256sum)"
+
+        old=""
+        release="$(
+          gh release list --json tagName \
+            | jq -r '.[].tagName' \
+            | grep "^${SYSEXT}-latest$"
+        )"
+        if [[ -n "${release}" ]]; then
+          echo "Fetching SHA256SUMS from existing release: ${release}"
+          curl --location --output SHA256SUMS.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/SHA256SUMS"
+          old="$(cat SHA256SUMS.old | sha256sum)"
+        fi
+
+        if [[ "${new}" == "${old}" ]]; then
+          echo "No changes for ${release} since last release. Skipping."
+        else
+          echo "Creating new release: ${SYSEXT}-latest"
+
+          {
+          echo "Releases available:"
+          echo "\`\`\`"
+          cat ./SHA256SUMS
+          echo "\`\`\`"
+          } > notes
+
+          gh release delete \
+            --cleanup-tag \
+            --yes \
+            "${SYSEXT}-latest" \
+            || true
+
+          gh release create \
+            --title "${SYSEXT} for Fedora" \
+            --notes-file notes \
+            "${SYSEXT}-latest" \
+            --latest=false \
+            ./SHA256SUMS
+        fi

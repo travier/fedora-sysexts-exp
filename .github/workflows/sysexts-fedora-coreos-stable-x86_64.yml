@@ -45,7 +45,7 @@ jobs:
           git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
 
       - name: "Build sysext: cilium-cli"
-        uses: ./.github/actions/sysexts
+        uses: ./.github/actions/build
         with:
           sysext: 'cilium-cli'
           image: ${{ env.IMAGE }}
@@ -69,109 +69,10 @@ jobs:
           git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
 
       - name: "Build sysext: cilium-cli"
-        env:
-          SYSEXT: cilium-cli
-          PR: ${{ github.event_name == 'pull_request' }}
-        run: |
-          set -euxo pipefail
-
-          cd "${SYSEXT}"
-          if [[ "${PR}" == "true" ]]; then
-              diff="$(git diff origin/main HEAD --stat -- . ; git diff origin/main HEAD --stat -- ../sysext.just)"
-              if [[ -z "${diff}" ]]; then
-                  echo "Skipping: No changes for this sysext in this PR"
-                  exit 0
-              fi
-          fi
-
-          just build ${IMAGE}
-
-      - name: "Publish sysext: cilium-cli"
-        env:
-          SYSEXT: cilium-cli
-        if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
-        run: |
-          set -euxo pipefail
-
-          git config --global --add safe.directory "${PWD}"
-
-          # Redefine grep to not fail when there are no matches
-          grep() {
-            /usr/bin/grep "$@" || test $? = 1
-          }
-
-          cd "${SYSEXT}"
-          sha256sum *.raw > SHA256SUMS
-
-          arch="$(uname --machine)"
-          if [[ "${arch}" == "x86_64" ]]; then
-              arch="x86-64"
-          else
-              arch="aarch64"
-          fi
-
-          # FIXME
-          VERSION_ID="41"
-
-          VERSION="$(cat ./version)"
-
-          echo "Updating release for this sysext"
-          new="$(cat digest inputs scripts | sha256sum)"
-
-          old=""
-          release="$(
-            gh release list --json tagName \
-              | jq -r '.[].tagName' \
-              | grep "^${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}$"
-          )"
-          if [[ -n "${release}" ]]; then
-            echo "Fetching info from existing release: ${release}"
-            curl --location --output digest.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/digest"
-            curl --location --output inputs.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/inputs"
-            curl --location --output scripts.old "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/scripts"
-            old="$(cat digest.old inputs.old scripts.old | sha256sum)"
-          fi
-
-          if [[ "${new}" == "${old}" ]]; then
-            echo "No changes in inputs since last release. Skipping."
-          else
-            echo "Creating new release for: ${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}"
-
-            {
-            echo "Release:"
-            echo "\`\`\`"
-            cat ./SHA256SUMS
-            echo "\`\`\`"
-            echo ""
-            echo "Built using container image:"
-            echo "\`\`\`"
-            cat ./digest
-            echo "\`\`\`"
-            echo ""
-            echo "Built using input files:"
-            echo "\`\`\`"
-            cat ./inputs
-            echo "\`\`\`"
-            echo ""
-            echo "Built using scripts:"
-            echo "\`\`\`"
-            cat ./scripts
-            echo "\`\`\`"
-            } > notes
-
-            gh release delete \
-              --cleanup-tag \
-              --yes \
-              "${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}" \
-              || true
-
-            gh release create \
-              --title "${SYSEXT} ${VERSION} for Fedora ${VERSION_ID} (${arch})" \
-              --notes-file notes \
-              "${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}" \
-              --latest=false \
-              ./*.raw ./SHA256SUMS ./inputs ./scripts ./digest
-          fi
+        uses: ./.github/actions/build
+        with:
+          sysext: 'cilium-cli'
+          image: ${{ env.IMAGE }}
 
   publish-sysext-latest:
     runs-on: "ubuntu-24.04"
@@ -183,7 +84,8 @@ jobs:
       - build-x86_64
       - build-aarch64
     # Still run if any dependent job fails
-    if: ${{ always() }}
+    # if: ${{ always() }}
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v4
@@ -193,75 +95,10 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
 
-      - name: "Update latest release for sysext: cilium-cli"
-        env:
-          SYSEXT: cilium-cli
-        if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
-        run: |
-          set -euxo pipefail
-
-          arch="$(uname --machine)"
-          if [[ "${arch}" == "x86_64" ]]; then
-              arch="x86-64"
-          else
-              arch="aarch64"
-          fi
-
-          releases=(
-            $(
-              gh release list --json tagName \
-                | jq -r '.[].tagName' \
-                | grep "^${SYSEXT}-" \
-                | grep -v "${SYSEXT}-latest$" \
-                | sort -h
-            )
-          )
-          echo "Looking at releases: ${releases[@]}"
-          for rel in ${releases[@]}; do
-            echo "Fetching SHA256SUMS for release: ${rel}"
-            curl --location --output "SHA256SUMS.${rel}" \
-              "https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS"
-          done
-          ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
-          new="$(cat SHA256SUMS | sha256sum)"
-
-          old=""
-          release="$(
-            gh release list --json tagName \
-              | jq -r '.[].tagName' \
-              | grep "^${SYSEXT}-latest$"
-          )"
-          if [[ -n "${release}" ]]; then
-            echo "Fetching SHA256SUMS from existing release: ${release}"
-            curl --location --output SHA256SUMS.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/SHA256SUMS"
-            old="$(cat SHA256SUMS.old | sha256sum)"
-          fi
-
-          if [[ "${new}" == "${old}" ]]; then
-            echo "No changes for ${release} since last release. Skipping."
-          else
-            echo "Creating new release: ${SYSEXT}-latest"
-
-            {
-            echo "Releases available:"
-            echo "\`\`\`"
-            cat ./SHA256SUMS
-            echo "\`\`\`"
-            } > notes
-
-            gh release delete \
-              --cleanup-tag \
-              --yes \
-              "${SYSEXT}-latest" \
-              || true
-
-            gh release create \
-              --title "${SYSEXT} for Fedora" \
-              --notes-file notes \
-              "${SYSEXT}-latest" \
-              --latest=false \
-              ./SHA256SUMS
-          fi
+      - name: "Gather versions for sysext: cilium-cli"
+        uses: ./.github/actions/gather
+        with:
+          sysext: 'cilium-cli'
 
   publish-latest:
     runs-on: "ubuntu-24.04"
@@ -272,7 +109,8 @@ jobs:
     needs:
       - publish-sysext-latest
     # Still run if any dependent job fails
-    if: ${{ always() }}
+    # if: ${{ always() }}
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v4
@@ -283,73 +121,4 @@ jobs:
           git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
 
       - name: "Update latest release for all sysexts"
-        if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
-        run: |
-          set -euxo pipefail
-
-          arch="$(uname --machine)"
-          if [[ "${arch}" == "x86_64" ]]; then
-              arch="x86-64"
-          else
-              arch="aarch64"
-          fi
-
-          releases=(
-            $(
-              gh release list --json tagName \
-                | jq -r '.[].tagName' \
-                | grep -- "-latest$" \
-                | sort -h
-            )
-          )
-          echo "Looking at releases: ${releases[@]}"
-          for rel in ${releases[@]}; do
-            echo "Fetching SHA256SUMS for release: ${rel}"
-            curl --location --output "SHA256SUMS.${rel}" \
-              "https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS"
-          done
-          ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
-          new="$(cat SHA256SUMS | sha256sum)"
-
-          old=""
-          release="$(
-            gh release list --json tagName \
-              | jq -r '.[].tagName' \
-              | grep "^latest$"
-          )"
-          if [[ -n "${release}" ]]; then
-            echo "Fetching SHA256SUMS from existing release: ${release}"
-            curl --location --output SHA256SUMS.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/SHA256SUMS"
-            old="$(cat SHA256SUMS.old | sha256sum)"
-          fi
-
-          if [[ "${new}" == "${old}" ]]; then
-            echo "No changes for ${release} since last release. Skipping."
-          else
-            echo "Creating new release: latest"
-
-            for rel in ${releases[@]}; do
-              s="${rel%-latest}"
-              sed "s/%%SYSEXT%%/${s}/g" .workflow-templates/systemd-sysupdate.conf > ${s}.conf
-            done
-
-            {
-            echo "Releases available:"
-            echo "\`\`\`"
-            cat ./SHA256SUMS
-            echo "\`\`\`"
-            } > notes
-
-            gh release delete \
-              --cleanup-tag \
-              --yes \
-              "latest" \
-              || true
-
-            gh release create \
-              --title "System extensions for Fedora" \
-              --notes-file notes \
-              "latest" \
-              --latest=true \
-              ./SHA256SUMS ./*.conf
-          fi
+        uses: ./.github/actions/latest
