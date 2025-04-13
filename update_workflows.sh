@@ -62,14 +62,12 @@ generate() {
     local -r name="${2}"
     local -r jobname="${3}"
 
-    # Get the list of sysexts for a given target
-    sysexts=(
+    sysexts_x86_64=(
         '1password-cli'
         '1password-gui'
         'bitwarden'
         'cilium-cli'
         'cloud-hypervisor'
-        'docker-ce'
         'google-chrome'
         'incus'
         'microsoft-edge'
@@ -80,6 +78,19 @@ generate() {
         'wasmtime'
         'youki'
     )
+    sysexts_aarch64=(
+        'cilium-cli'
+        'cloud-hypervisor'
+        'incus'
+        'mullvad-vpn'
+        'virtctl'
+        'vscode'
+        'vscodium'
+        'wasmtime'
+        'youki'
+    )
+    # Get the list of sysexts for a given target
+    # sysexts=()
     # for s in $(git ls-tree -d --name-only HEAD | grep -Ev ".github|templates"); do
     #     pushd "${s}" > /dev/null
     #     # TODO: Only require the architecture to be explicitly listed for non x86_64 for now
@@ -104,7 +115,7 @@ generate() {
     cat "${tmpl}/10_sysexts_build_x86-64"
 
     echo ""
-    for s in "${sysexts[@]}"; do
+    for s in "${sysexts_x86_64[@]}"; do
         sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/15_sysexts_build"
         echo ""
     done
@@ -112,7 +123,7 @@ generate() {
     cat "${tmpl}/11_sysexts_build_aarch64"
 
     echo ""
-    for s in "${sysexts[@]}"; do
+    for s in "${sysexts_aarch64[@]}"; do
         sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/15_sysexts_build"
         echo ""
     done
@@ -120,7 +131,7 @@ generate() {
     cat "${tmpl}/20_sysexts_gather_pre"
 
     echo ""
-    for s in "${sysexts[@]}"; do
+    for s in "${sysexts_x86_64[@]}"; do
         sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/21_sysexts_gather"
         echo ""
     done
