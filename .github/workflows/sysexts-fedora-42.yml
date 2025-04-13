@@ -74,12 +74,6 @@ jobs:
           sysext: 'cloud-hypervisor'
           image: ${{ env.IMAGE }}
 
-      - name: "Build sysext: docker-ce"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'docker-ce'
-          image: ${{ env.IMAGE }}
-
       - name: "Build sysext: google-chrome"
         uses: ./.github/actions/build
         with:
@@ -152,24 +146,6 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
 
-      - name: "Build sysext: 1password-cli"
-        uses: ./.github/actions/build
-        with:
-          sysext: '1password-cli'
-          image: ${{ env.IMAGE }}
-
-      - name: "Build sysext: 1password-gui"
-        uses: ./.github/actions/build
-        with:
-          sysext: '1password-gui'
-          image: ${{ env.IMAGE }}
-
-      - name: "Build sysext: bitwarden"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'bitwarden'
-          image: ${{ env.IMAGE }}
-
       - name: "Build sysext: cilium-cli"
         uses: ./.github/actions/build
         with:
@@ -182,28 +158,10 @@ jobs:
           sysext: 'cloud-hypervisor'
           image: ${{ env.IMAGE }}
 
-      - name: "Build sysext: docker-ce"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'docker-ce'
-          image: ${{ env.IMAGE }}
-
-      - name: "Build sysext: google-chrome"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'google-chrome'
-          image: ${{ env.IMAGE }}
-
       - name: "Build sysext: incus"
         uses: ./.github/actions/build
         with:
           sysext: 'incus'
-          image: ${{ env.IMAGE }}
-
-      - name: "Build sysext: microsoft-edge"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'microsoft-edge'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: mullvad-vpn"
@@ -287,11 +245,6 @@ jobs:
         uses: ./.github/actions/gather
         with:
           sysext: 'cloud-hypervisor'
-
-      - name: "Gather versions for sysext: docker-ce"
-        uses: ./.github/actions/gather
-        with:
-          sysext: 'docker-ce'
 
       - name: "Gather versions for sysext: google-chrome"
         uses: ./.github/actions/gather
