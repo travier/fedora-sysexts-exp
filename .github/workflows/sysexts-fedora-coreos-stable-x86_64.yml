@@ -68,7 +68,8 @@ jobs:
           SYSEXT: cilium-cli
         if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
         run: |
-          set -euxo pipefail
+          set -eux
+          # Don't set -o pipefail as we don't want greps with no match to fail
 
           git config --global --add safe.directory "${PWD}"
 
@@ -145,7 +146,8 @@ jobs:
               ./*.raw ./SHA256SUMS ./inputs ./scripts ./digest
           fi
 
-          echo "Updating latest release for this sysext"
+          echo "Updating latest release for sysext: ${SYSEXT}"
+          rm -f SHA256SUMS*
           releases=(
             $(
               gh release list --json tagName \
@@ -162,7 +164,7 @@ jobs:
               "https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS"
           done
           ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
-          new="$(cat SHA256SUMS)"
+          new="$(cat SHA256SUMS | sha256sum)"
 
           old=""
           release="$(
@@ -173,7 +175,7 @@ jobs:
           if [[ -n "${release}" ]]; then
             echo "Fetching SHA256SUMS from existing release: ${release}"
             curl --location --output SHA256SUMS.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/SHA256SUMS"
-            old="$(cat SHA256SUMS.old)"
+            old="$(cat SHA256SUMS.old | sha256sum)"
           fi
 
           if [[ "${new}" == "${old}" ]]; then
@@ -203,6 +205,7 @@ jobs:
           fi
 
           echo "Updating latest release for all sysexts"
+          rm -f SHA256SUMS*
           releases=(
             $(
               gh release list --json tagName \
@@ -218,7 +221,7 @@ jobs:
               "https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS"
           done
           ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
-          new=$(cat SHA256SUMS)
+          new=$(cat SHA256SUMS | sha256sum)
 
           old=""
           release="$(
@@ -229,7 +232,7 @@ jobs:
           if [[ -n "${release}" ]]; then
             echo "Fetching SHA256SUMS from existing release: ${release}"
             curl --location --output SHA256SUMS.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/SHA256SUMS"
-            old="$(cat SHA256SUMS.old)"
+            old="$(cat SHA256SUMS.old | sha256sum)"
           fi
 
           if [[ "${new}" == "${old}" ]]; then
