@@ -1,7 +1,7 @@
 name := "virtctl"
 base_images := "
-quay.io/fedora/fedora-coreos:stable x86_64,aarch64
-quay.io/fedora/fedora-coreos:next x86_64,aarch64
+quay.io/fedora-ostree-desktops/base-atomic:41 x86_64,aarch64
+quay.io/fedora-ostree-desktops/base-atomic:42 x86_64,aarch64
 "
 
 import '../sysext.just'
@@ -30,9 +30,14 @@ download-manual arch=arch:
     echo "⬇️ Downloading virtctl"
     curl -L --location --remote-name-all "https://github.com/kubevirt/kubevirt/releases/download/v${VERSION}/virtctl-v${VERSION}-linux-${ARCH}"
     echo "${SHA256SUM}  virtctl-v${VERSION}-linux-${ARCH}" | sha256sum --check
-    mv "virtctl-v${VERSION}-linux-${ARCH}" virtctl
 
     curl -L --fail --remote-name-all "https://github.com/kubevirt/kubevirt/raw/refs/heads/main/LICENSE"
+
+    # Metadata
+    echo "${VERSION}" > ../version
+    sha256sum virtctl-v${VERSION}-linux-${ARCH} LICENSE >> ../inputs
+
+    mv "virtctl-v${VERSION}-linux-${ARCH}" virtctl
 
 # Custom installation step to install the binary
 install-manual:
