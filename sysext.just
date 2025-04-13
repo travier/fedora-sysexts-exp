@@ -514,6 +514,9 @@ build-erofs target arch=arch:
     # Get and store name, tag and digest for the container image used to build the sysext
     echo "{{target}}@$(podman inspect {{target}} | jq -r '.[0].Digest')" > digest
 
+    # Store version_id (Fedora release)
+    echo "${version_id}" > ./version_id
+
     # Store the hashes of the scripts used to build the sysext
     sha256sum justfile >> scripts
     cd ..
