@@ -12,7 +12,7 @@ import '../sysext.just'
 all: default
 
 version:
-    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/mullvad-vpn-*.rpm > ./version
+    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/MullvadVPN-*.rpm > ./version
 
 install-manual:
     #!/bin/bash
