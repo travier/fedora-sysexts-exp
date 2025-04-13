@@ -45,7 +45,7 @@ jobs:
           git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
 
       - name: "Build sysext: cilium-cli"
-        uses: ./.github/actions/sysexts-action.yml
+        uses: ./.github/actions/sysexts
         with:
           sysext: 'cilium-cli'
           image: ${{ env.IMAGE }}
