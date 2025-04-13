@@ -57,9 +57,7 @@ runs:
             arch="aarch64"
         fi
 
-        # FIXME
-        VERSION_ID="41"
-
+        VERSION_ID="$(cat ./version_id)"
         VERSION="$(cat ./version)"
 
         echo "Updating release for this sysext"
