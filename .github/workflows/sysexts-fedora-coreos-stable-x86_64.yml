@@ -68,8 +68,7 @@ jobs:
           SYSEXT: cilium-cli
         if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
         run: |
-          set -eux
-          # Don't set -o pipefail as we don't want greps with no match to fail
+          set -euxo pipefail
 
           git config --global --add safe.directory "${PWD}"
 
@@ -95,7 +94,7 @@ jobs:
           release="$(
             gh release list --json tagName \
               | jq -r '.[].tagName' \
-              | grep "^${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}$"
+              | { grep "^${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}$" || true }
           )"
           if [[ -n "${release}" ]]; then
             echo "Fetching info from existing release: ${release}"
@@ -170,7 +169,7 @@ jobs:
           release="$(
             gh release list --json tagName \
               | jq -r '.[].tagName' \
-              | grep "^${SYSEXT}-latest$"
+              | { grep "^${SYSEXT}-latest$" || true }
           )"
           if [[ -n "${release}" ]]; then
             echo "Fetching SHA256SUMS from existing release: ${release}"
@@ -227,7 +226,7 @@ jobs:
           release="$(
             gh release list --json tagName \
               | jq -r '.[].tagName' \
-              | grep "^latest$"
+              | { grep "^latest$" || true }
           )"
           if [[ -n "${release}" ]]; then
             echo "Fetching SHA256SUMS from existing release: ${release}"
