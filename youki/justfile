@@ -31,7 +31,7 @@ download-manual arch=arch:
 
     # Metadata
     echo "${VERSION}" > ../version
-    sha256sum ${SHA256SUM} youki-${VERSION}-${ARCH}-gnu.tar.gz" > ../inputs
+    sha256sum "${SHA256SUM} youki-${VERSION}-${ARCH}-gnu.tar.gz" > ../inputs
 
     tar xf youki-${VERSION}-${ARCH}-gnu.tar.gz
     rm youki-${VERSION}-${ARCH}-gnu.tar.gz README.md

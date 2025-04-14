@@ -30,4 +30,7 @@ download-rpms target arch=arch:
     rm ./*.rpm.sha256
 
 version:
+    #!/bin/bash
+    set -euo pipefail
+    # set -x
     rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/vscodium-*.rpm > ./version

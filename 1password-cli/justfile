@@ -9,14 +9,16 @@ import '../sysext.just'
 
 all: default
 
-download-manual arch=arch:
+download-rpms target arch=arch:
     #!/bin/bash
     set -euo pipefail
     # set -x
-
     mkdir -p rpms
-    curl -Lo rpms/1password-cli.rpm \
+    curl --location -o rpms/1password-cli.rpm \
         https://downloads.1password.com/linux/rpm/stable/x86_64/1password-cli-latest.x86_64.rpm
 
 version:
-    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/1password-cli-*.rpm > ./version
+    #!/bin/bash
+    set -euo pipefail
+    # set -x
+    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/1password-cli.rpm > ./version

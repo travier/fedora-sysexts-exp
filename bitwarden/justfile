@@ -10,11 +10,10 @@ import '../sysext.just'
 
 all: default
 
-download-manual arch=arch:
+download-rpm target arch=arch:
     #!/bin/bash
     set -euo pipefail
     # set -x
-
     mkdir -p rpms
     curl -Lo rpms/bitwarden.rpm \
         "https://bitwarden.com/download/?app=desktop&platform=linux&variant=rpm"

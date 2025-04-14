@@ -12,6 +12,9 @@ import '../sysext.just'
 all: default
 
 version:
+    #!/bin/bash
+    set -euo pipefail
+    # set -x
     rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/MullvadVPN-*.rpm > ./version
 
 install-manual:
