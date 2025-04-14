@@ -237,9 +237,6 @@ download-rpms target arch=arch:
         "{{target}}" \
         bash -c "export FORCE_COLUMNS=100 && ${pre_commands}dnf download --resolve ${dnf_arch} ${dnf_opts} ${disablerepos} ${enablerepos} ${packages}"
 
-    # Store the hashes of the RPMs used to build the sysext
-    sha256sum *.rpm >> ../inputs
-
 # Manual download step, that can be overridden to dowload non RPM content
 download-manual arch=arch:
     #!/bin/bash
@@ -325,6 +322,11 @@ install-rpms:
     if [[ -z "{{packages}}" ]]; then
         exit 0
     fi
+
+    cd rpms
+    # Store the hashes of the RPMs used to build the sysext
+    sha256sum *.rpm >> ../inputs
+    cd ..
 
     if [[ "${UID}" == "0" ]]; then
         SUDO=""
