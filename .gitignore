@@ -5,7 +5,9 @@ binaries/
 *.raw
 *.rpm
 version
+version_id
 inputs
 digest
 scripts
+json
 /.dnf-cache/

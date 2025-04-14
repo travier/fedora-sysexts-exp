@@ -31,6 +31,7 @@ download-manual arch=arch:
     wget "https://github.com/bytecodealliance/wasmtime/releases/download/v${version}/${destfile}"
     echo "${sha256sum}  ${destfile}" | sha256sum -c -
     tar xf "${destfile}"
+    mv wasmtime-*/{wasmtime,LICENSE} .
 
     # Metadata
     echo "${version}" > ../version
@@ -51,7 +52,7 @@ install-manual:
     cd rootfs
 
     echo "➡️ Installing bandwhich"
-    ${SUDO} install -D -m 755 ../binaries/wasmtime-v31.0.0-x86_64-linux/wasmtime usr/bin/wasmtime
-    ${SUDO} install -D -m 644 ../binaries/wasmtime-v31.0.0-x86_64-linux/LICENSE usr/share/licenses/wasmtime/LICENSE
+    ${SUDO} install -D -m 755 ../binaries/wasmtime usr/bin/wasmtime
+    ${SUDO} install -D -m 644 ../binaries/LICENSE usr/share/licenses/wasmtime/LICENSE
 
     ${SUDO} chown -R root: usr
