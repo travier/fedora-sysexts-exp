@@ -110,12 +110,6 @@ jobs:
           sysext: 'vscode'
           image: ${{ env.IMAGE }}
 
-      - name: "Build sysext: vscodium"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'vscodium'
-          image: ${{ env.IMAGE }}
-
       - name: "Build sysext: wasmtime"
         uses: ./.github/actions/build
         with:
@@ -180,12 +174,6 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'vscode'
-          image: ${{ env.IMAGE }}
-
-      - name: "Build sysext: vscodium"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'vscodium'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: wasmtime"
@@ -275,11 +263,6 @@ jobs:
         uses: ./.github/actions/gather
         with:
           sysext: 'vscode'
-
-      - name: "Gather versions for sysext: vscodium"
-        uses: ./.github/actions/gather
-        with:
-          sysext: 'vscodium'
 
       - name: "Gather versions for sysext: wasmtime"
         uses: ./.github/actions/gather

@@ -74,7 +74,6 @@ generate() {
         'mullvad-vpn'
         'virtctl'
         'vscode'
-        'vscodium'
         'wasmtime'
         'youki'
     )
@@ -85,7 +84,6 @@ generate() {
         'mullvad-vpn'
         'virtctl'
         'vscode'
-        'vscodium'
         'wasmtime'
         'youki'
     )
