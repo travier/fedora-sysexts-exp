@@ -547,7 +547,7 @@ clean:
     fi
 
     echo "🧹 Cleaning up files from previous builds"
-    rm -rf inputs scripts digest
+    rm -rf inputs scripts digest version version_id
     rm -rf ./rpms
     rm -rf ./binaries
     ${SUDO} rm -rf ./rootfs ./rootfs.ignored
