@@ -52,7 +52,7 @@ runs:
 
         old=""
         release="$(
-          gh release list ---limit 1000 --json tagName \
+          gh release list --limit 1000 --json tagName \
             | jq --arg SYSEXT "${SYSEXT}" --raw-output '
               map(
                 select(.tagName == "$SYSEXT-latest")
