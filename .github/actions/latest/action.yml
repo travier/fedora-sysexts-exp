@@ -28,7 +28,7 @@ runs:
             gh release list --limit 1000 --json tagName \
               | jq --raw-output '
                 map(
-                  select(.tagName | endswith("-latest"))
+                  select(.tagName | endswith("-latest.fedora"))
                 )
                 | .[].tagName
               ' \
@@ -44,28 +44,29 @@ runs:
         new="$(cat SHA256SUMS | sha256sum)"
 
         old=""
+        TAGNAME="latest.fedora"
         release="$(
           gh release list --limit 1000 --json tagName \
-            | jq --raw-output '
+            | jq --arg TAGNAME "${TAGNAME}" --raw-output '
                 map(
-                  select(.tagName == "latest")
+                  select(.tagName == $TAGNAME)
                 )
                 | .[].tagName
               '
         )"
         if [[ -n "${release}" ]]; then
-          echo "Fetching SHA256SUMS from existing release: ${release}"
-          curl --location --output SHA256SUMS.old "${RELEASEURL}/${release}/SHA256SUMS"
+          echo "Fetching SHA256SUMS from existing release: ${TAGNAME}"
+          curl --location --output SHA256SUMS.old "${RELEASEURL}/${TAGNAME}/SHA256SUMS"
           old="$(cat SHA256SUMS.old | sha256sum)"
         fi
 
         if [[ "${new}" == "${old}" ]]; then
-          echo "No changes for ${release} since last release. Skipping."
+          echo "No changes for ${TAGNAME} since last release. Skipping."
         else
-          echo "Creating new release: latest"
+          echo "Creating new release: ${TAGNAME}"
 
           for rel in ${releases[@]}; do
-            s="${rel%-latest}"
+            s="${rel%-latest.fedora}"
             sed "s/%%SYSEXT%%/${s}/g" .workflow-templates/systemd-sysupdate.conf > ${s}.conf
           done
 
@@ -79,13 +80,13 @@ runs:
           gh release delete \
             --cleanup-tag \
             --yes \
-            "latest" \
+            "${TAGNAME}" \
             || true
 
           gh release create \
             --title "System extensions for Fedora" \
             --notes-file notes \
-            "latest" \
+            "${TAGNAME}" \
             --latest=true \
             ./SHA256SUMS ./*.conf
         fi

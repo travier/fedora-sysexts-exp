@@ -69,7 +69,7 @@ runs:
         new="$(cat digest inputs scripts | sha256sum)"
 
         old=""
-        TAGNAME="${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}"
+        TAGNAME="${SYSEXT}-${VERSION}-${VERSION_ID}-${arch}.fedora"
         release="$(
           gh release list --limit 1000 --json tagName \
             | jq --arg TAGNAME "${TAGNAME}" --raw-output '
@@ -90,7 +90,7 @@ runs:
         if [[ "${new}" == "${old}" ]]; then
           echo "No changes in inputs since last release. Skipping."
         else
-          echo "Creating new release for: ${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}"
+          echo "Creating new release for: ${TAGNAME}"
 
           {
           echo "Release:"
@@ -117,13 +117,13 @@ runs:
           gh release delete \
             --cleanup-tag \
             --yes \
-            "${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}" \
+            "${TAGNAME}" \
             || true
 
           gh release create \
             --title "${SYSEXT} ${VERSION} for Fedora ${VERSION_ID} (${arch})" \
             --notes-file notes \
-            "${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}" \
+            "${TAGNAME}" \
             --latest=false \
             ./*.raw ./SHA256SUMS ./inputs ./scripts ./digest
         fi

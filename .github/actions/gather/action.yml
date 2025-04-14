@@ -36,7 +36,9 @@ runs:
                   select(
                     (.tagName | startswith($SYSEXT))
                     and
-                    (.tagName | endswith("-latest") | not)
+                    (.tagName | endswith(".fedora"))
+                    and
+                    (.tagName | endswith("-latest.fedora") | not)
                   )
                 )
                 | .[].tagName
@@ -53,23 +55,24 @@ runs:
         new="$(cat SHA256SUMS | sha256sum)"
 
         old=""
+        TAGNAME="${SYSEXT}-latest.fedora"
         release="$(
           gh release list --limit 1000 --json tagName \
-            | jq --arg SYSEXT "${SYSEXT}" --raw-output '
+            | jq --arg TAGNAME "${TAGNAME}" --raw-output '
               map(
-                select(.tagName == "$SYSEXT-latest")
+                select(.tagName == "$TAGNAME")
               ).[].tagName'
         )"
         if [[ -n "${release}" ]]; then
-          echo "Fetching SHA256SUMS from existing release: ${release}"
-          curl --location --output SHA256SUMS.old "${RELEASEURL}/${release}/SHA256SUMS"
+          echo "Fetching SHA256SUMS from existing release: ${TAGNAME}"
+          curl --location --output SHA256SUMS.old "${RELEASEURL}/${TAGNAME}/SHA256SUMS"
           old="$(cat SHA256SUMS.old | sha256sum)"
         fi
 
         if [[ "${new}" == "${old}" ]]; then
-          echo "No changes for ${release} since last release. Skipping."
+          echo "No changes for ${TAGNAME} since last release. Skipping."
         else
-          echo "Creating new release: ${SYSEXT}-latest"
+          echo "Creating new release: ${TAGNAME}"
 
           {
           echo "Releases available:"
@@ -81,13 +84,13 @@ runs:
           gh release delete \
             --cleanup-tag \
             --yes \
-            "${SYSEXT}-latest" \
+            "${TAGNAME}" \
             || true
 
           gh release create \
             --title "${SYSEXT} for Fedora" \
             --notes-file notes \
-            "${SYSEXT}-latest" \
+            "${TAGNAME}" \
             --latest=false \
             ./SHA256SUMS
         fi
