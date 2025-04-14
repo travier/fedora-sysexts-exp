@@ -19,6 +19,8 @@ runs:
 
         RELEASEURL="https://github.com/travier/fedora-sysexts-exp/releases/download"
 
+        rm -f SHA256SUMS*
+
         arch="$(uname --machine)"
         if [[ "${arch}" == "x86_64" ]]; then
             arch="x86-64"
