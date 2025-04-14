@@ -1,0 +1,60 @@
+# Redirect caddyfile for processing systemd-sysupdate requests.
+#
+# This Caddyfile will redirect incoming requests to GitHub releases, making it
+# appear to clients like systemd-sysupdate as if all sysexts released are in
+# the same directory.
+# For clients, the directory layout looks like e.g.:
+#
+# SHA256SUMS
+# kubernetes-1.30.2-f41-aarch64.raw
+# kubernetes-1.30.2-f41-x86-64.raw
+# kubernetes-1.30.2-f42-aarch64.raw
+# kubernetes-1.30.2-f42-x86-64.raw
+# kubernetes-1.30.4-f41-aarch64.raw
+# kubernetes-1.30.4-f41-x86-64.raw
+# kubernetes-1.30.4-f42-aarch64.raw
+# kubernetes-1.30.4-f42-x86-64.raw
+# kubernetes-1.30.conf
+# ...
+#
+# while in fact requests are being redirected to GitHub releases depending on
+# which pattern matches the request.
+#
+# This is heavily inspired from:
+# https://github.com/flatcar/sysext-bakery/blob/main/tools/http-url-rewrite-server/Caddyfile
+# which is distributed under the Apache License 2.0
+
+# For testing locally, use:
+# podman run --rm -ti -v $PWD/Caddyfile:/etc/caddy/Caddyfile:Z -p 8080:8080 docker.io/caddy:latest
+http://:8080 {
+    vars base_dest_url "https://github.com/travier/fedora-sysexts-exp/releases/download"
+
+    # Extension image:
+    #   <extension> = <name>-<version>-<release>-<arch>.raw
+    #     ==>  https://[...]/releases/download/<extension>/<extension>.raw
+    @raw path_regexp raw ^.*/extensions/([^/]+).raw$
+    redir @raw {vars.base_dest_url}/{re.raw.1}/{re.raw.1}.raw
+
+    # sysupdate conf
+    #   <name>.conf
+    #     ==>  https://[...]/releases/download/latest/<name>.conf
+    @conf path_regexp conf ^.*/extensions/([^/]+).conf$
+    redir @conf {vars.base_dest_url}/latest/{re.conf.1}.conf
+
+    # Extension specific SHA file with extension name in path (group 1)
+    #     <extension>/SHA256SUMS
+    #       ==>  https://[...]/releases/download/<extension>/SHA256SUMS
+    # https://github.com/travier/fedora-sysexts-exp/releases/download/cilium-cli-latest/SHA256SUMS
+    # @esha path_regexp esha ^/extensions/([^/]+)/SHA256SUMS$
+    # redir @esha {vars.base_dest_url}/{re.esha.1}/SHA256SUMS
+
+    # Global SHA file with all extensions in it.
+    #     /SHA256SUMS
+    #       ==>  https://[...]/releases/download/latest/SHA256SUMS
+    # https://github.com/travier/fedora-sysexts-exp/releases/download/latest/SHA256SUMS
+    @sha path_regexp sha ^/extensions/SHA256SUMS$
+    redir @sha {vars.base_dest_url}/latest/SHA256SUMS
+
+    # None of the above matched, redirect to the website.
+    redir https://travier.github.io/fedora-sysexts-exp{uri}
+}
