@@ -27,10 +27,10 @@ download-rpms target arch=arch:
     rpmurl="$(cat json | jq -r '.assets[] | select(.name == "codium-'${release}'-el9.'${arch}'.rpm") | .browser_download_url')"
     wget "${rpmurl}"{,.sha256}
     sha256sum -c ./*.rpm.sha256
-    rm ./*.rpm.sha256
+    rm ./*.rpm.sha256 ./json
 
 version:
     #!/bin/bash
     set -euo pipefail
     # set -x
-    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/vscodium-*.rpm > ./version
+    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/codium-*.rpm > ./version
