@@ -27,8 +27,8 @@ download-manual arch=arch:
     echo "⬇️ Downloading bandwhich"
     destfile="bandwhich-v0.23.0-x86_64-unknown-linux-gnu.tar.gz"
     wget "https://github.com/imsnif/bandwhich/releases/download/v0.23.0/${destfile}"
-    hash="be4ed3a35efa76e78f6ab92c708c9672145b4129f459f6950e48c0458cf727d7  ${destfile}"
-    echo "${hash}" | sha256sum -c -
+    sha256sum="be4ed3a35efa76e78f6ab92c708c9672145b4129f459f6950e48c0458cf727d7  ${destfile}"
+    echo "${sha256sum}" | sha256sum -c -
     tar xf "${destfile}"
     gzip -9 assets/bandwhich.1
 

@@ -21,20 +21,20 @@ download-manual arch=arch:
     version="31.0.0"
     arch="{{arch}}"
     if [[ "${arch}" == "x86_64" ]]; then
-        hash="ba5f2aebd96d9d81bdb98e18ba6b98b9519c27256d37b1fce283dae00eef543e"
+        sha256sum="ba5f2aebd96d9d81bdb98e18ba6b98b9519c27256d37b1fce283dae00eef543e"
     else
-        hash="efcef82b5f4d3a0c78bf14cd8827cef3d3be191c7ff05c5f6949386ff23802cf"
+        sha256sum="efcef82b5f4d3a0c78bf14cd8827cef3d3be191c7ff05c5f6949386ff23802cf"
     fi
 
     echo "⬇️ Downloading wasmtime"
     destfile="wasmtime-v${version}-${arch}-linux.tar.xz"
     wget "https://github.com/bytecodealliance/wasmtime/releases/download/v${version}/${destfile}"
-    echo "${hash}  ${destfile}" | sha256sum -c -
+    echo "${sha256sum}  ${destfile}" | sha256sum -c -
     tar xf "${destfile}"
 
     # Metadata
     echo "${version}" > ../version
-    echo "${hash}  ${destfile}" > ../inputs
+    echo "${sha256sum}  ${destfile}" > ../inputs
 
 # Custom installation step to install bandwhich
 install-manual:

@@ -14,8 +14,8 @@ download-rpms target arch=arch:
     set -euo pipefail
     # set -x
     mkdir -p rpms
-    curl --location -o rpms/1password-cli.rpm \
-        https://downloads.1password.com/linux/rpm/stable/x86_64/1password-cli-latest.x86_64.rpm
+    curl --location --fail --output rpms/1password-cli.rpm \
+        "https://downloads.1password.com/linux/rpm/stable/x86_64/1password-cli-latest.x86_64.rpm"
 
 version:
     #!/bin/bash

@@ -19,23 +19,27 @@ download-manual arch=arch:
 
     echo "⬇️ Downloading cilium-cli"
 
-    VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
+    version=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
 
     if [[ "{{arch}}" == "x86_64" ]]; then
-        ARCH=amd64
+        arch=amd64
     else
-        ARCH=arm64
+        arch=arm64
     fi
 
-    curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${VERSION}/cilium-linux-${ARCH}.tar.gz{,.sha256sum}
-    sha256sum --check cilium-linux-${ARCH}.tar.gz.sha256sum
-    tar xzvfC cilium-linux-${ARCH}.tar.gz ./
+    curl --location --fail --output "cilium-linux-${arch}.tar.gz" \
+        "https://github.com/cilium/cilium-cli/releases/download/${version}/cilium-linux-${arch}.tar.gz"
+    curl --location --fail --output "cilium-linux-${arch}.tar.gz.sha256sum" \
+        "https://github.com/cilium/cilium-cli/releases/download/${version}/cilium-linux-${arch}.tar.gz.sha256sum"
+    sha256sum --check cilium-linux-${arch}.tar.gz.sha256sum
+    tar xzvfC cilium-linux-${arch}.tar.gz ./
 
-    curl -L --fail --remote-name-all "https://github.com/cilium/cilium-cli/raw/refs/tags/${VERSION}/LICENSE"
+    curl --location --fail --output "LICENSE" \
+        "https://github.com/cilium/cilium-cli/raw/refs/tags/${version}/LICENSE"
 
     # Metadata
-    echo "${VERSION#v}" > ../version
-    sha256sum cilium-linux-${ARCH}.tar.gz LICENSE >> ../inputs
+    echo "${version#v}" > ../version
+    sha256sum cilium-linux-${arch}.tar.gz LICENSE >> ../inputs
 
 # Custom installation step to install the binary
 install-manual:
