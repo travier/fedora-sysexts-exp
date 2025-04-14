@@ -22,7 +22,10 @@ runs:
 
         cd "${SYSEXT}"
         if [[ "${PR}" == "true" ]]; then
-            diff="$(git diff origin/main HEAD --stat -- . ; git diff origin/main HEAD --stat -- ../sysext.just)"
+            diff="$(
+              git diff origin/main HEAD --stat -- . ; \
+              git diff origin/main HEAD --stat -- ../sysext.just
+            )"
             if [[ -z "${diff}" ]]; then
                 echo "Skipping: No changes for this sysext in this PR"
                 exit 0
@@ -39,6 +42,8 @@ runs:
       shell: bash
       run: |
         set -euxo pipefail
+
+        RELEASEURL="https://github.com/travier/fedora-sysexts-exp/releases/download"
 
         git config --global --add safe.directory "${PWD}"
 
@@ -64,16 +69,21 @@ runs:
         new="$(cat digest inputs scripts | sha256sum)"
 
         old=""
+        TAGNAME="${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}"
         release="$(
-          gh release list --json tagName \
-            | jq -r '.[].tagName' \
-            | grep "^${SYSEXT}-${VERSION_ID}-${VERSION}-${arch}$"
+          gh release list --limit 1000 --json tagName \
+            | jq --arg TAGNAME "${TAGNAME}" --raw-output '
+                map(
+                  select(.tagName == $TAGNAME)
+                )
+                | .[].tagName
+              '
         )"
         if [[ -n "${release}" ]]; then
           echo "Fetching info from existing release: ${release}"
-          curl --location --output digest.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/digest"
-          curl --location --output inputs.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/inputs"
-          curl --location --output scripts.old "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/scripts"
+          curl --location --output digest.old  "${RELEASEURL}/${release}/digest"
+          curl --location --output inputs.old  "${RELEASEURL}/${release}/inputs"
+          curl --location --output scripts.old "${RELEASEURL}/${release}/scripts"
           old="$(cat digest.old inputs.old scripts.old | sha256sum)"
         fi
 

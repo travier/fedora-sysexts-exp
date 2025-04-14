@@ -12,6 +12,8 @@ runs:
       run: |
         set -euxo pipefail
 
+        RELEASEURL="https://github.com/travier/fedora-sysexts-exp/releases/download"
+
         arch="$(uname --machine)"
         if [[ "${arch}" == "x86_64" ]]; then
             arch="x86-64"
@@ -21,30 +23,37 @@ runs:
 
         releases=(
           $(
-            gh release list --json tagName \
-              | jq -r '.[].tagName' \
-              | grep -- "-latest$" \
+            gh release list --limit 1000 --json tagName \
+              | jq --raw-output '
+                map(
+                  select(.tagName | endswith("-latest"))
+                )
+                | .[].tagName
+              ' \
               | sort -h
           )
         )
         echo "Looking at releases: ${releases[@]}"
         for rel in ${releases[@]}; do
           echo "Fetching SHA256SUMS for release: ${rel}"
-          curl --location --output "SHA256SUMS.${rel}" \
-            "https://github.com/travier/fedora-sysexts-exp/releases/download/${rel}/SHA256SUMS"
+          curl --location --output "SHA256SUMS.${rel}" "${RELEASEURL}/${rel}/SHA256SUMS"
         done
         ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
         new="$(cat SHA256SUMS | sha256sum)"
 
         old=""
         release="$(
-          gh release list --json tagName \
-            | jq -r '.[].tagName' \
-            | grep "^latest$"
+          gh release list --limit 1000 --json tagName \
+            | jq --raw-output '
+                map(
+                  select(.tagName == "latest")
+                )
+                | .[].tagName
+              '
         )"
         if [[ -n "${release}" ]]; then
           echo "Fetching SHA256SUMS from existing release: ${release}"
-          curl --location --output SHA256SUMS.old  "https://github.com/travier/fedora-sysexts-exp/releases/download/${release}/SHA256SUMS"
+          curl --location --output SHA256SUMS.old "${RELEASEURL}/${release}/SHA256SUMS"
           old="$(cat SHA256SUMS.old | sha256sum)"
         fi
 
