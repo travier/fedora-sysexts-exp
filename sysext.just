@@ -255,7 +255,7 @@ version:
 
     echo "🏷️ Writing down version"
 
-    if [[ -n {{version_package}} ]]; then
+    if [[ -n "{{version_package}}" ]]; then
         if [[ $(ls rpms/{{version_package}}*.rpm | wc -l) -ne 1 ]]; then
             echo "More than one package matched: {{version_package}}."
             exit 1
