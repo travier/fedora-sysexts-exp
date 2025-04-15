@@ -132,10 +132,10 @@ jobs:
           image: ${{ env.IMAGE }}
 
   publish-sysexts:
-    runs-on: ${{ env.RUNS_ON }}
+    runs-on: "ubuntu-24.04-arm"
     container:
-      image: ${{ env.CONTAINER_IMAGE }}
-      options: ${{ env.CONTAINER_OPTIONS }}
+      image: "ghcr.io/travier/fedora-sysexts-exp/buildroot:latest"
+      options: "--privileged --security-opt label=disable --user 0:0"
     # Run after the builds and versionned release
     needs:
       - build-fedora-base-atomic-41
