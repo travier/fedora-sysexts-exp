@@ -1,10 +1,13 @@
 name: "Publish 'latest' release with all sysexts"
 description: "Publish the 'latest' release that references all available sysexts"
 
+# This composite action needs the ARCH & RELEASEURL environment variables to be
+# set at the workflow level
+
 runs:
   using: "composite"
   steps:
-    - name: "Publish 'latest' release"
+    - name: "Publish 'latest-$ARCH' release"
       env:
         GH_TOKEN: ${{ github.token }}
       if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
@@ -12,23 +15,20 @@ runs:
       run: |
         set -euxo pipefail
 
-        RELEASEURL="https://github.com/travier/fedora-sysexts-exp/releases/download"
-
         rm -f SHA256SUMS*
 
-        arch="$(uname --machine)"
-        if [[ "${arch}" == "x86_64" ]]; then
-            arch="x86-64"
-        else
-            arch="aarch64"
-        fi
-
+        LATEST="-latest-${ARCH}"
+        TAGNAME="latest-${ARCH}"
         releases=(
           $(
             gh release list --limit 1000 --json tagName \
-              | jq --raw-output '
+              | jq --arg LATEST "${LATEST}" --raw-output '
                 map(
-                  select(.tagName | endswith("-latest.fedora"))
+                  select(
+                    (.tagName | endswith($LATEST))
+                    and
+                    (.tagName != $TAGNAME)
+                  )
                 )
                 | .[].tagName
               ' \
@@ -44,7 +44,6 @@ runs:
         new="$(cat SHA256SUMS | sha256sum)"
 
         old=""
-        TAGNAME="latest.fedora"
         release="$(
           gh release list --limit 1000 --json tagName \
             | jq --arg TAGNAME "${TAGNAME}" --raw-output '
@@ -66,7 +65,7 @@ runs:
           echo "Creating new release: ${TAGNAME}"
 
           for rel in ${releases[@]}; do
-            s="${rel%-latest.fedora}"
+            s="${rel%-latest-${ARCH}}"
             sed "s/%%SYSEXT%%/${s}/g" .workflow-templates/systemd-sysupdate.conf > ${s}.conf
           done
 
@@ -84,7 +83,7 @@ runs:
             || true
 
           gh release create \
-            --title "System extensions for Fedora" \
+            --title "System extensions for Fedora (${ARCH})" \
             --notes-file notes \
             "${TAGNAME}" \
             --latest=true \

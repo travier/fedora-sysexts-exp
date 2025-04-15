@@ -8,6 +8,9 @@ inputs:
     description: "The image to use as a base for the sysext"
     required: true
 
+# This composite action needs the ARCH & RELEASEURL environment variables to be
+# set at the workflow level
+
 runs:
   using: "composite"
   steps:
@@ -43,8 +46,6 @@ runs:
       run: |
         set -euxo pipefail
 
-        RELEASEURL="https://github.com/travier/fedora-sysexts-exp/releases/download"
-
         git config --global --add safe.directory "${PWD}"
 
         # Redefine grep to not fail when there are no matches
@@ -55,13 +56,6 @@ runs:
         cd "${SYSEXT}"
         sha256sum *.raw > SHA256SUMS
 
-        arch="$(uname --machine)"
-        if [[ "${arch}" == "x86_64" ]]; then
-            arch="x86-64"
-        else
-            arch="aarch64"
-        fi
-
         VERSION_ID="$(cat ./version_id)"
         VERSION="$(cat ./version)"
 
@@ -69,7 +63,7 @@ runs:
         new="$(cat digest inputs scripts | sha256sum)"
 
         old=""
-        TAGNAME="${SYSEXT}-${VERSION}-${VERSION_ID}-${arch}.fedora"
+        TAGNAME="${SYSEXT}-${VERSION}-${VERSION_ID}-${ARCH}"
         release="$(
           gh release list --limit 1000 --json tagName \
             | jq --arg TAGNAME "${TAGNAME}" --raw-output '
@@ -121,7 +115,7 @@ runs:
             || true
 
           gh release create \
-            --title "${SYSEXT} ${VERSION} for Fedora ${VERSION_ID} (${arch})" \
+            --title "${SYSEXT} ${VERSION} for Fedora ${VERSION_ID} (${ARCH})" \
             --notes-file notes \
             "${TAGNAME}" \
             --latest=false \

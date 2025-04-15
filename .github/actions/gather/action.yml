@@ -5,6 +5,9 @@ inputs:
     description: "The sysext to work on"
     required: true
 
+# This composite action needs the ARCH & RELEASEURL environment variables to be
+# set at the workflow level
+
 runs:
   using: "composite"
   steps:
@@ -17,28 +20,18 @@ runs:
       run: |
         set -euxo pipefail
 
-        RELEASEURL="https://github.com/travier/fedora-sysexts-exp/releases/download"
-
         rm -f SHA256SUMS*
 
-        arch="$(uname --machine)"
-        if [[ "${arch}" == "x86_64" ]]; then
-            arch="x86-64"
-        else
-            arch="aarch64"
-        fi
-
+        TAGNAME="${SYSEXT}-latest-${ARCH}"
         releases=(
           $(
             gh release list --limit 1000 --json tagName \
-              | jq --arg SYSEXT "${SYSEXT}" --raw-output '
+              | jq --arg SYSEXT "${SYSEXT}" --arg TAGNAME "${TAGNAME}" --raw-output '
                 map(
                   select(
                     (.tagName | startswith($SYSEXT))
                     and
-                    (.tagName | endswith(".fedora"))
-                    and
-                    (.tagName | endswith("-latest.fedora") | not)
+                    (.tagName != $LATEST)
                   )
                 )
                 | .[].tagName
@@ -55,7 +48,6 @@ runs:
         new="$(cat SHA256SUMS | sha256sum)"
 
         old=""
-        TAGNAME="${SYSEXT}-latest.fedora"
         release="$(
           gh release list --limit 1000 --json tagName \
             | jq --arg TAGNAME "${TAGNAME}" --raw-output '
@@ -88,7 +80,7 @@ runs:
             || true
 
           gh release create \
-            --title "${SYSEXT} for Fedora" \
+            --title "${SYSEXT} for Fedora (${ARCH})" \
             --notes-file notes \
             "${TAGNAME}" \
             --latest=false \

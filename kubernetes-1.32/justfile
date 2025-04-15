@@ -1,9 +1,11 @@
-name := "kubernetes-1.32"
+kube_version := "1.32"
+
+name := "kubernetes-" + kube_version
 packages := "
-cri-tools1.32
-kubernetes1.32
-kubernetes1.32-client
-kubernetes1.32-kubeadm
+cri-tools"  + kube_version + "
+kubernetes" + kube_version + "
+kubernetes" + kube_version + "-client
+kubernetes" + kube_version + "-kubeadm
 "
 exclude_packages := "
 cri-tools
@@ -19,6 +21,12 @@ quay.io/fedora/fedora-coreos:next x86_64,aarch64
 import '../sysext.just'
 
 all: default
+
+version:
+    #!/bin/bash
+    set -euo pipefail
+    # set -x
+    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/kubernetes{{kube_version}}-{{kube_version}}*.rpm > ./version
 
 # Setup folder that is expected by Kubernetes
 install-manual:

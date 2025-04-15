@@ -1,0 +1,171 @@
+name: "Build sysexts for Fedora aarch64"
+
+env:
+  GH_TOKEN: ${{ github.token }}
+  ARCH: "aarch64"
+  RUNS_ON: "ubuntu-24.04-arm"
+  CONTAINER_IMAGE: "ghcr.io/travier/fedora-sysexts-exp/buildroot:latest"
+  CONTAINER_OPTIONS: "--privileged --security-opt label=disable --user 0:0"
+  RELEASEURL: "https://github.com/travier/fedora-sysexts-exp/releases/download"
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  schedule:
+    - cron:  '0 0 * * MON'
+  workflow_dispatch:
+
+# Needed to allow creating a release
+permissions:
+  contents: write
+
+# Prevent multiple workflow runs from racing to ensure that pushes are made
+# sequentialy for the main branch. Also cancel in progress workflow runs.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.sysext }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build-fedora-base-atomic-41:
+    runs-on: ${{ env.RUNS_ON }}
+    container:
+      image: ${{ env.CONTAINER_IMAGE }}
+      options: ${{ env.CONTAINER_OPTIONS }}
+    env:
+      IMAGE: "quay.io/fedora-ostree-desktops/base-atomic:41"
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+
+      - name: "Setup artifacts and dnf cache directories"
+        run: |
+          mkdir -p artifacts .dnf-cache
+
+      - name: "Mark directory as safe"
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+
+      - name: "Build sysext: cilium-cli"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'cilium-cli'
+          image: ${{ env.IMAGE }}
+
+  build-fedora-base-atomic-42:
+    runs-on: ${{ env.RUNS_ON }}
+    container:
+      image: ${{ env.CONTAINER_IMAGE }}
+      options: ${{ env.CONTAINER_OPTIONS }}
+    env:
+      IMAGE: "quay.io/fedora-ostree-desktops/base-atomic:42"
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+
+      - name: "Setup artifacts and dnf cache directories"
+        run: |
+          mkdir -p artifacts .dnf-cache
+
+      - name: "Mark directory as safe"
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+
+      - name: "Build sysext: cilium-cli"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'cilium-cli'
+          image: ${{ env.IMAGE }}
+
+  build-fedora-coreos-stable:
+    runs-on: ${{ env.RUNS_ON }}
+    container:
+      image: ${{ env.CONTAINER_IMAGE }}
+      options: ${{ env.CONTAINER_OPTIONS }}
+    env:
+      IMAGE: "quay.io/fedora/fedora-coreos:stable"
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+
+      - name: "Setup artifacts and dnf cache directories"
+        run: |
+          mkdir -p artifacts .dnf-cache
+
+      - name: "Mark directory as safe"
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+
+      - name: "Build sysext: kubernetes-1.32"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'kubernetes-1.32'
+          image: ${{ env.IMAGE }}
+
+  build-fedora-coreos-next:
+    runs-on: ${{ env.RUNS_ON }}
+    container:
+      image: ${{ env.CONTAINER_IMAGE }}
+      options: ${{ env.CONTAINER_OPTIONS }}
+    env:
+      IMAGE: "quay.io/fedora/fedora-coreos:next"
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+
+      - name: "Setup artifacts and dnf cache directories"
+        run: |
+          mkdir -p artifacts .dnf-cache
+
+      - name: "Mark directory as safe"
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+
+      - name: "Build sysext: kubernetes-1.32"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'kubernetes-1.32'
+          image: ${{ env.IMAGE }}
+
+  publish-sysexts:
+    runs-on: ${{ env.RUNS_ON }}
+    container:
+      image: ${{ env.CONTAINER_IMAGE }}
+      options: ${{ env.CONTAINER_OPTIONS }}
+    # Run after the builds and versionned release
+    needs:
+      - build-fedora-base-atomic-41
+      - build-fedora-base-atomic-42
+      - build-fedora-coreos-stable
+      - build-fedora-coreos-next
+    # Still run if any dependent job fails
+    # if: ${{ always() }}
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+
+      - name: "Mark directory as safe"
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+
+      - name: "Gather versions for sysext: cilium-cli"
+        uses: ./.github/actions/gather
+        with:
+          sysext: 'cilium-cli'
+
+      - name: "Gather versions for sysext: kubernetes-1.32"
+        uses: ./.github/actions/gather
+        with:
+          sysext: 'kubernetes-1.32'
+
+      - name: "Update latest release for all sysexts"
+        uses: ./.github/actions/latest
