@@ -4,7 +4,7 @@
       image: "ghcr.io/travier/fedora-sysexts-exp/buildroot:latest"
       options: "--privileged --security-opt label=disable --user 0:0"
     env:
-      IMAGE: "%IMAGE%"
+      IMAGE: "%%IMAGE%%"
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v4
