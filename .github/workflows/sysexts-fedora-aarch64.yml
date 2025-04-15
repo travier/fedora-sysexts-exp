@@ -3,8 +3,6 @@ name: "Build sysexts for Fedora aarch64"
 env:
   GH_TOKEN: ${{ github.token }}
   ARCH: "aarch64"
-  CONTAINER_IMAGE: "ghcr.io/travier/fedora-sysexts-exp/buildroot:latest"
-  CONTAINER_OPTIONS: "--privileged --security-opt label=disable --user 0:0"
   RELEASEURL: "https://github.com/travier/fedora-sysexts-exp/releases/download"
 
 on:
@@ -32,8 +30,8 @@ jobs:
   build-fedora-base-atomic-41:
     runs-on: "ubuntu-24.04-arm"
     container:
-      image: ${{ env.CONTAINER_IMAGE }}
-      options: ${{ env.CONTAINER_OPTIONS }}
+      image: "ghcr.io/travier/fedora-sysexts-exp/buildroot:latest"
+      options: "--privileged --security-opt label=disable --user 0:0"
     env:
       IMAGE: "quay.io/fedora-ostree-desktops/base-atomic:41"
     steps:
@@ -58,8 +56,8 @@ jobs:
   build-fedora-base-atomic-42:
     runs-on: "ubuntu-24.04-arm"
     container:
-      image: ${{ env.CONTAINER_IMAGE }}
-      options: ${{ env.CONTAINER_OPTIONS }}
+      image: "ghcr.io/travier/fedora-sysexts-exp/buildroot:latest"
+      options: "--privileged --security-opt label=disable --user 0:0"
     env:
       IMAGE: "quay.io/fedora-ostree-desktops/base-atomic:42"
     steps:
@@ -84,8 +82,8 @@ jobs:
   build-fedora-coreos-stable:
     runs-on: "ubuntu-24.04-arm"
     container:
-      image: ${{ env.CONTAINER_IMAGE }}
-      options: ${{ env.CONTAINER_OPTIONS }}
+      image: "ghcr.io/travier/fedora-sysexts-exp/buildroot:latest"
+      options: "--privileged --security-opt label=disable --user 0:0"
     env:
       IMAGE: "quay.io/fedora/fedora-coreos:stable"
     steps:
@@ -110,8 +108,8 @@ jobs:
   build-fedora-coreos-next:
     runs-on: "ubuntu-24.04-arm"
     container:
-      image: ${{ env.CONTAINER_IMAGE }}
-      options: ${{ env.CONTAINER_OPTIONS }}
+      image: "ghcr.io/travier/fedora-sysexts-exp/buildroot:latest"
+      options: "--privileged --security-opt label=disable --user 0:0"
     env:
       IMAGE: "quay.io/fedora/fedora-coreos:next"
     steps:
