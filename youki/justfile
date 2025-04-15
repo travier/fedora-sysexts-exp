@@ -30,12 +30,16 @@ download-manual arch=arch:
         "https://github.com/youki-dev/youki/releases/download/v${version}/youki-${version}-${arch}-gnu.tar.gz"
     echo "${sha256sum}  youki-${version}-${arch}-gnu.tar.gz" | sha256sum --check
 
-    # Metadata
+    # Version & metadata
     echo "${version}" > ../version
     echo "${sha256sum} youki-${version}-${arch}-gnu.tar.gz" > ../inputs
 
     tar xf youki-${version}-${arch}-gnu.tar.gz
     rm youki-${version}-${arch}-gnu.tar.gz README.md
+
+# Skip default version recipe
+version:
+    true
 
 # Custom installation step to install the binary
 install-manual:

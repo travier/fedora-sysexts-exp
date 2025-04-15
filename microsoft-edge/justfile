@@ -10,12 +10,6 @@ import '../sysext.just'
 
 all: default
 
-version:
-    #!/bin/bash
-    set -euo pipefail
-    # set -x
-    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/microsoft-edge-stable-*.rpm > ./version
-
 install-manual:
     #!/bin/bash
     set -euo pipefail

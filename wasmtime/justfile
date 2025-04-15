@@ -8,7 +8,7 @@ import '../sysext.just'
 
 all: default
 
-# Custom download step to get bandwhich
+# Custom download step to get wasmtime
 download-manual arch=arch:
     #!/bin/bash
     set -euo pipefail
@@ -33,9 +33,13 @@ download-manual arch=arch:
     tar xf "${destfile}"
     mv wasmtime-*/{wasmtime,LICENSE} .
 
-    # Metadata
+    # Version & metadata
     echo "${version}" > ../version
     echo "${sha256sum}  ${destfile}" > ../inputs
+
+# Skip default version recipe
+version:
+    true
 
 # Custom installation step to install bandwhich
 install-manual:

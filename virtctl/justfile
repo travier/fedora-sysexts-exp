@@ -35,11 +35,15 @@ download-manual arch=arch:
     curl --location --fail --output LICENSE \
         "https://github.com/kubevirt/kubevirt/raw/refs/heads/main/LICENSE"
 
-    # Metadata
+    # Version & metadata
     echo "${version}" > ../version
     sha256sum virtctl-v${version}-linux-${arch} LICENSE >> ../inputs
 
     mv "virtctl-v${version}-linux-${arch}" virtctl
+
+# Skip default recipe
+version:
+    true
 
 # Custom installation step to install the binary
 install-manual:
