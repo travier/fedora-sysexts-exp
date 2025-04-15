@@ -14,91 +14,48 @@ main() {
         exit 1
     fi
 
-    # Remove all existing worflows
-    # rm -f "./.github/workflows/containers"*".yml"
-    # rm "./.github/workflows/sysexts"*".yml"
+    Remove all existing worflows
+    rm -f "./.github/workflows/containers"*".yml"
+    rm "./.github/workflows/sysexts"*".yml"
 
-    generate \
-        'quay.io/fedora-ostree-desktops/base-atomic:41' \
-        'Fedora 41' \
-        'fedora-41'
-
-    generate \
-        'quay.io/fedora-ostree-desktops/base-atomic:42' \
-        'Fedora 42' \
-        'fedora-42'
-
-    # generate \
-    #     'quay.io/fedora/fedora-coreos:stable' \
-    #     'Fedora CoreOS (stable)'
-    #
-    # generate \
-    #     'quay.io/fedora/fedora-coreos:next' \
-    #     'Fedora CoreOS (next)'
-
-    # generate \
-    #     'quay.io/fedora-ostree-desktops/silverblue' \
-    #     '41' \
-    #     'Fedora Silverblue'
-
-    # generate \
-    #     'quay.io/fedora-ostree-desktops/silverblue' \
-    #     '42' \
-    #     'Fedora Silverblue'
-
-    # generate \
-    #     'quay.io/fedora-ostree-desktops/kinoite' \
-    #     '41' \
-    #     'Fedora Kinoite'
-
-    # generate \
-    #     'quay.io/fedora-ostree-desktops/kinoite' \
-    #     '42' \
-    #     'Fedora Kinoite'
+    generate "x86-64"
+    generate "aarch64"
 }
 
 generate() {
-    local -r image="${1}"
-    local -r name="${2}"
-    local -r jobname="${3}"
 
-    sysexts_x86_64=(
-        '1password-cli'
-        '1password-gui'
-        'bitwarden'
-        'cilium-cli'
-        'cloud-hypervisor'
-        'google-chrome'
-        'incus'
-        'microsoft-edge'
-        'mullvad-vpn'
-        'virtctl'
-        'vscode'
-        'vscodium'
-        'wasmtime'
-        'youki'
+    images=(
+        'quay.io/fedora-ostree-desktops/base-atomic:41'
+        'quay.io/fedora-ostree-desktops/base-atomic:42'
+        'quay.io/fedora/fedora-coreos:stable'
+        'quay.io/fedora/fedora-coreos:next'
     )
-    sysexts_aarch64=(
-        'cilium-cli'
-        'cloud-hypervisor'
-        'incus'
-        'mullvad-vpn'
-        'virtctl'
-        'vscode'
-        'vscodium'
-        'wasmtime'
-        'youki'
-    )
-    # Get the list of sysexts for a given target
-    # sysexts=()
-    # for s in $(git ls-tree -d --name-only HEAD | grep -Ev ".github|templates"); do
-    #     pushd "${s}" > /dev/null
-    #     # TODO: Only require the architecture to be explicitly listed for non x86_64 for now
-    #     if [[ $(just targets | grep -c "${image}") == "1" ]]; then
-    #         sysexts+=("${s}")
-    #     fi
-    #     popd > /dev/null
-    # done
+    # 'quay.io/fedora-ostree-desktops/silverblue:41'
+    # 'quay.io/fedora-ostree-desktops/silverblue:42'
+    # 'quay.io/fedora-ostree-desktops/kinoite:41'
+    # 'quay.io/fedora-ostree-desktops/kinoite:42'
+
+    for image in "${images[@]}"; do
+        # Get the list of sysexts for a given target
+        sysexts=()
+        for s in $(git ls-tree -d --name-only HEAD | grep -Ev ".github|.workflow-templates"); do
+            pushd "${s}" > /dev/null
+            # Only require the architecture to be explicitly listed for non x86_64 for now
+            if [[ "${arch}" == "x86_64" ]]; then
+                if [[ $(just targets | grep -c "${image}:${release}") == "1" ]]; then
+                    sysexts+=("${s}")
+                fi
+            else
+                if [[ $(just targets | grep -cE "${image}:${release} .*${arch}.*") == "1" ]]; then
+                    sysexts+=("${s}")
+                fi
+            fi
+            popd > /dev/null
+        done
+        echo "${sysexts}"
+    done
+
+    exit 0
 
     local -r tmpl=".workflow-templates/"
     if [[ ! -d "${tmpl}" ]]; then
@@ -106,21 +63,26 @@ generate() {
         exit 1
     fi
 
+    jobname="fedora-41"
+    image="quay.io/fedora-ostree-desktops/base-atomic:41"
+
+
     # Generate EROFS sysexts workflows
     {
-    sed -e "s|%%IMAGE%%|${image}|g" \
-        -e "s|%%NAME%%|${name}|g" \
-        "${tmpl}/00_sysexts_header"
+    cat "${tmpl}/00_sysexts_header"
 
-    cat "${tmpl}/10_sysexts_build_x86-64"
+    sed -e "s|%%JOBNAME%%|${jobname}|g" \
+        "${tmpl}/10_sysexts_build_x86-64"
 
     echo ""
     for s in "${sysexts_x86_64[@]}"; do
-        sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/15_sysexts_build"
+        sed -e "s|%%IMAGE%%|${image}|g" \
+            -e "s|%%SYSEXT%%|${s}|g" "${tmpl}/15_sysexts_build"
         echo ""
     done
 
-    cat "${tmpl}/11_sysexts_build_aarch64"
+    sed -e "s|%%SHORTNAME%%|${shortname}|g" \
+        "${tmpl}/11_sysexts_build_aarch64"
 
     echo ""
     for s in "${sysexts_aarch64[@]}"; do
