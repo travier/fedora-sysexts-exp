@@ -31,7 +31,7 @@ runs:
                   select(
                     (.tagName | startswith($SYSEXT))
                     and
-                    (.tagName != $LATEST)
+                    (.tagName != $TAGNAME)
                   )
                 )
                 | .[].tagName

@@ -22,7 +22,7 @@ runs:
         releases=(
           $(
             gh release list --limit 1000 --json tagName \
-              | jq --arg LATEST "${LATEST}" --raw-output '
+              | jq --arg LATEST "${LATEST}" --arg TAGNAME "${TAGNAME}" --raw-output '
                 map(
                   select(
                     (.tagName | endswith($LATEST))
