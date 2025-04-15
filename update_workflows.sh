@@ -14,15 +14,17 @@ main() {
         exit 1
     fi
 
-    Remove all existing worflows
+    # Remove all existing worflows
     rm -f "./.github/workflows/containers"*".yml"
-    rm "./.github/workflows/sysexts"*".yml"
+    rm -f "./.github/workflows/sysexts"*".yml"
 
-    generate "x86-64"
+    generate "x86_64"
     generate "aarch64"
 }
 
+# Generate EROFS sysexts workflows
 generate() {
+    local arch="${1}"
 
     images=(
         'quay.io/fedora-ostree-desktops/base-atomic:41'
@@ -42,20 +44,30 @@ generate() {
             pushd "${s}" > /dev/null
             # Only require the architecture to be explicitly listed for non x86_64 for now
             if [[ "${arch}" == "x86_64" ]]; then
-                if [[ $(just targets | grep -c "${image}:${release}") == "1" ]]; then
+                if [[ $(just targets | grep -c "${image}") == "1" ]]; then
                     sysexts+=("${s}")
                 fi
             else
-                if [[ $(just targets | grep -cE "${image}:${release} .*${arch}.*") == "1" ]]; then
+                if [[ $(just targets | grep -cE "${image} .*${arch}.*") == "1" ]]; then
                     sysexts+=("${s}")
                 fi
             fi
             popd > /dev/null
         done
-        echo "${sysexts}"
-    done
 
-    exit 0
+        if [[ "${image}" == "quay.io/fedora-ostree-desktops/base-atomic:41" ]]; then
+            sysexts_fedora_41=("${sysexts[@]}")
+        fi
+        if [[ "${image}" == "quay.io/fedora-ostree-desktops/base-atomic:42" ]]; then
+            sysexts_fedora_42=("${sysexts[@]}")
+        fi
+        if [[ "${image}" == "quay.io/fedora/fedora-coreos:stable" ]]; then
+            sysexts_fedora_coreos_stable=("${sysexts[@]}")
+        fi
+        if [[ "${image}" == "quay.io/fedora/fedora-coreos:next" ]]; then
+            sysexts_fedora_coreos_next=("${sysexts[@]}")
+        fi
+    done
 
     local -r tmpl=".workflow-templates/"
     if [[ ! -d "${tmpl}" ]]; then
@@ -63,43 +75,72 @@ generate() {
         exit 1
     fi
 
-    jobname="fedora-41"
-    image="quay.io/fedora-ostree-desktops/base-atomic:41"
+    if [[ "${arch}" == "x86_64" ]]; then
+        arch="x86-64"
+    fi
 
+    releaseurl="https://github.com/travier/fedora-sysexts-exp/releases/download"
 
-    # Generate EROFS sysexts workflows
     {
-    cat "${tmpl}/00_sysexts_header"
+    sed -e "s|%%ARCH%%|${arch}|g" \
+        -e "s|%%RELEASEURL%%|${releaseurl}|g" \
+        "${tmpl}/00_sysexts_header"
 
-    sed -e "s|%%JOBNAME%%|${jobname}|g" \
-        "${tmpl}/10_sysexts_build_x86-64"
+    for image in "${images[@]}"; do
+        jobname=""
+        if [[ "${image}" == "quay.io/fedora-ostree-desktops/base-atomic:41" ]]; then
+            jobname="fedora-41"
+            sysexts=("${sysexts_fedora_41[@]}")
+        fi
+        if [[ "${image}" == "quay.io/fedora-ostree-desktops/base-atomic:42" ]]; then
+            jobname="fedora-42"
+            sysexts=("${sysexts_fedora_42[@]}")
+        fi
+        if [[ "${image}" == "quay.io/fedora/fedora-coreos:stable" ]]; then
+            jobname="fedora-coreos-stable"
+            sysexts=("${sysexts_fedora_coreos_stable[@]}")
+        fi
+        if [[ "${image}" == "quay.io/fedora/fedora-coreos:next" ]]; then
+            jobname="fedora-coreos-next"
+            sysexts=("${sysexts_fedora_coreos_next[@]}")
+        fi
 
-    echo ""
-    for s in "${sysexts_x86_64[@]}"; do
-        sed -e "s|%%IMAGE%%|${image}|g" \
-            -e "s|%%SYSEXT%%|${s}|g" "${tmpl}/15_sysexts_build"
+        sed -e "s|%%JOBNAME%%|${jobname}|g" \
+            -e "s|%%IMAGE%%|${image}|g" \
+            "${tmpl}/10_sysexts_build_header"
         echo ""
+        for s in "${sysexts[@]}"; do
+            sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/15_sysexts_build"
+            echo ""
+        done
     done
 
-    sed -e "s|%%SHORTNAME%%|${shortname}|g" \
-        "${tmpl}/11_sysexts_build_aarch64"
+    # TODO
+    cat "${tmpl}/20_sysexts_gather_header"
 
-    echo ""
-    for s in "${sysexts_aarch64[@]}"; do
-        sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/15_sysexts_build"
+    for image in "${images[@]}"; do
+        if [[ "${image}" == "quay.io/fedora-ostree-desktops/base-atomic:41" ]]; then
+            sysexts=("${sysexts_fedora_41[@]}")
+        fi
+        if [[ "${image}" == "quay.io/fedora-ostree-desktops/base-atomic:42" ]]; then
+            sysexts=("${sysexts_fedora_42[@]}")
+        fi
+        if [[ "${image}" == "quay.io/fedora/fedora-coreos:stable" ]]; then
+            sysexts=("${sysexts_fedora_coreos_stable[@]}")
+        fi
+        if [[ "${image}" == "quay.io/fedora/fedora-coreos:next" ]]; then
+            sysexts=("${sysexts_fedora_coreos_next[@]}")
+        fi
+
         echo ""
-    done
-
-    cat "${tmpl}/20_sysexts_gather_pre"
-
-    echo ""
-    for s in "${sysexts_x86_64[@]}"; do
-        sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/21_sysexts_gather"
-        echo ""
+        for s in "${sysexts[@]}"; do
+            sed -e "s|%%SYSEXT%%|${s}|g" "${tmpl}/25_sysexts_gather"
+            echo ""
+        done
     done
 
     cat "${tmpl}/30_sysexts_latest"
-    } > ".github/workflows/sysexts-${jobname}.yml"
+    } > ".github/workflows/sysexts-fedora-${arch}.yml"
 }
 
 main "${@}"
