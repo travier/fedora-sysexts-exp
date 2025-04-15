@@ -535,7 +535,7 @@ build-erofs target arch=arch:
     version=""
     if [[ -f ./version ]]; then
         # Remove special characters from the version
-        version="$(cat ./version | sed "s/\^/_")"
+        version="$(cat ./version | sed "s/\^/_/")"
     else
         version=$(podman run --rm -ti \
             --arch={{arch}} \
