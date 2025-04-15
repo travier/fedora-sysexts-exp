@@ -534,7 +534,8 @@ build-erofs target arch=arch:
 
     version=""
     if [[ -f ./version ]]; then
-        version="$(cat ./version)"
+        # Remove special characters from the version
+        version="$(cat ./version | sed "s/\^/_")"
     else
         version=$(podman run --rm -ti \
             --arch={{arch}} \
@@ -542,6 +543,7 @@ build-erofs target arch=arch:
             "{{target}}" \
             bash -c 'source /etc/os-release ; echo -n ${OSTREE_VERSION}')
     fi
+    echo "${version}" > ./version
 
     # Post process architecture to match systemd architecture list
     arch="$(echo {{arch}} | sed 's/_/-/g')"
