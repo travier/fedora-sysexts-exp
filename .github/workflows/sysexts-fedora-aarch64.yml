@@ -3,7 +3,6 @@ name: "Build sysexts for Fedora aarch64"
 env:
   GH_TOKEN: ${{ github.token }}
   ARCH: "aarch64"
-  RUNS_ON: "ubuntu-24.04-arm"
   CONTAINER_IMAGE: "ghcr.io/travier/fedora-sysexts-exp/buildroot:latest"
   CONTAINER_OPTIONS: "--privileged --security-opt label=disable --user 0:0"
   RELEASEURL: "https://github.com/travier/fedora-sysexts-exp/releases/download"
@@ -31,7 +30,7 @@ concurrency:
 
 jobs:
   build-fedora-base-atomic-41:
-    runs-on: ${{ env.RUNS_ON }}
+    runs-on: "ubuntu-24.04-arm"
     container:
       image: ${{ env.CONTAINER_IMAGE }}
       options: ${{ env.CONTAINER_OPTIONS }}
@@ -57,7 +56,7 @@ jobs:
           image: ${{ env.IMAGE }}
 
   build-fedora-base-atomic-42:
-    runs-on: ${{ env.RUNS_ON }}
+    runs-on: "ubuntu-24.04-arm"
     container:
       image: ${{ env.CONTAINER_IMAGE }}
       options: ${{ env.CONTAINER_OPTIONS }}
@@ -83,7 +82,7 @@ jobs:
           image: ${{ env.IMAGE }}
 
   build-fedora-coreos-stable:
-    runs-on: ${{ env.RUNS_ON }}
+    runs-on: "ubuntu-24.04-arm"
     container:
       image: ${{ env.CONTAINER_IMAGE }}
       options: ${{ env.CONTAINER_OPTIONS }}
@@ -109,7 +108,7 @@ jobs:
           image: ${{ env.IMAGE }}
 
   build-fedora-coreos-next:
-    runs-on: ${{ env.RUNS_ON }}
+    runs-on: "ubuntu-24.04-arm"
     container:
       image: ${{ env.CONTAINER_IMAGE }}
       options: ${{ env.CONTAINER_OPTIONS }}
