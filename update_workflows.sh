@@ -141,6 +141,11 @@ generate() {
 
     cat "${tmpl}/30_sysexts_latest"
     } > ".github/workflows/sysexts-fedora-${arch}.yml"
+
+    # Fixup runs-on for aarch64
+    if [[ "${arch}" == "aarch64" ]]; then
+        sed -i "s/ubuntu-24.04/ubuntu-24.04-arm/g" ".github/workflows/sysexts-fedora-${arch}.yml"
+    fi
 }
 
 main "${@}"
