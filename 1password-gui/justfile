@@ -18,12 +18,6 @@ download-rpms target arch=arch:
     curl --location --fail --output rpms/1password.rpm \
         "https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm"
 
-version:
-    #!/bin/bash
-    set -euo pipefail
-    # set -x
-    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/1password.rpm > ./version
-
 install-manual:
     #!/bin/bash
     set -euo pipefail

@@ -18,12 +18,6 @@ download-rpms target arch=arch:
     curl --location --fail --output rpms/bitwarden.rpm \
         "https://bitwarden.com/download/?app=desktop&platform=linux&variant=rpm"
 
-version:
-    #!/bin/bash
-    set -euo pipefail
-    # set -x
-    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/bitwarden.rpm > ./version
-
 install-manual:
     #!/bin/bash
     set -euo pipefail
