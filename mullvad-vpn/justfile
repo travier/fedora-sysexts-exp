@@ -1,5 +1,5 @@
 name := "mullvad-vpn"
-packages := "mullvad-vpn"
+packages := "MullvadVPN"
 pre_commands := "rm -rf /opt && mkdir /opt"
 external_repos := "https://repository.mullvad.net/rpm/stable/mullvad.repo"
 base_images := "
