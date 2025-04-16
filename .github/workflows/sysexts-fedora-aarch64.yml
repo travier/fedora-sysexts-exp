@@ -131,12 +131,6 @@ jobs:
           sysext: 'libvirtd-desktop'
           image: ${{ env.IMAGE }}
 
-      - name: "Build sysext: mpd"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'mpd'
-          image: ${{ env.IMAGE }}
-
       - name: "Build sysext: mullvad-vpn"
         uses: ./.github/actions/build
         with:
@@ -335,12 +329,6 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'libvirtd-desktop'
-          image: ${{ env.IMAGE }}
-
-      - name: "Build sysext: mpd"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'mpd'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: mullvad-vpn"
@@ -704,11 +692,6 @@ jobs:
         with:
           sysext: 'libvirtd-desktop'
 
-      - name: "Gather versions for sysext: mpd"
-        uses: ./.github/actions/gather
-        with:
-          sysext: 'mpd'
-
       - name: "Gather versions for sysext: mullvad-vpn"
         uses: ./.github/actions/gather
         with:
@@ -859,11 +842,6 @@ jobs:
         uses: ./.github/actions/gather
         with:
           sysext: 'libvirtd-desktop'
-
-      - name: "Gather versions for sysext: mpd"
-        uses: ./.github/actions/gather
-        with:
-          sysext: 'mpd'
 
       - name: "Gather versions for sysext: mullvad-vpn"
         uses: ./.github/actions/gather

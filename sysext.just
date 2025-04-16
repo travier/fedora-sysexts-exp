@@ -288,7 +288,7 @@ version:
         exit 1
     fi
 
-    packages=("$(echo "{{packages}}" | xargs)")
+    packages=($(echo "{{packages}}" | xargs))
 
     if [[ ${#packages[@]} -ne 1 ]]; then
         if [[ $(ls rpms/*.rpm | grep -c "{{name}}") -eq 1 ]]; then
