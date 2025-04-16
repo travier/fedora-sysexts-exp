@@ -8,8 +8,8 @@ inputs:
     description: "The image to use as a base for the sysext"
     required: true
 
-# This composite action needs the ARCH & RELEASEURL environment variables to be
-# set at the workflow level
+# This composite action needs the RELEASEURL environment variables to be set at
+# the workflow level
 
 runs:
   using: "composite"
@@ -61,6 +61,8 @@ runs:
 
         echo "Updating release for this sysext"
         new="$(cat digest inputs scripts | sha256sum)"
+
+        ARCH="$(uname -m | sed 's/_/-/g')"
 
         old=""
         TAGNAME="${SYSEXT}-${VERSION}-${VERSION_ID}-${ARCH}"

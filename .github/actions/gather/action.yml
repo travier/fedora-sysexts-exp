@@ -1,20 +1,20 @@
-name: "Gather versions for a sysext"
-description: "Gather all versions for a sysext and publish a 'latest' release for it"
+name: "Gather all sysexts in a 'latest' release"
+description: "Publish the 'latest' release that references all available sysexts"
 inputs:
-  sysext:
-    description: "The sysext to work on"
+  sysexts:
+    description: "The list of sysexts to generate systemd sysupdate configs for (names separated by semicolon)"
     required: true
 
-# This composite action needs the ARCH & RELEASEURL environment variables to be
-# set at the workflow level
+# This composite action needs the RELEASEURL environment variables to be set at
+# the workflow level
 
 runs:
   using: "composite"
   steps:
-    - name: "Gather versions for a sysext"
+    - name: "Publish 'latest' release"
       env:
-        SYSEXT: ${{ inputs.sysext }}
         GH_TOKEN: ${{ github.token }}
+        SYSEXTS: ${{ inputs.sysexts }}
       if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
       shell: bash
       run: |
@@ -22,17 +22,13 @@ runs:
 
         rm -f SHA256SUMS*
 
-        TAGNAME="${SYSEXT}-latest-${ARCH}"
+        TAGNAME="latest"
         releases=(
           $(
             gh release list --limit 1000 --json tagName \
-              | jq --arg SYSEXT "${SYSEXT}" --arg TAGNAME "${TAGNAME}" --raw-output '
+              | jq --arg TAGNAME "${TAGNAME}" --raw-output '
                 map(
-                  select(
-                    (.tagName | startswith($SYSEXT))
-                    and
-                    (.tagName != $TAGNAME)
-                  )
+                  select(.tagName != $TAGNAME)
                 )
                 | .[].tagName
               ' \
@@ -52,8 +48,10 @@ runs:
           gh release list --limit 1000 --json tagName \
             | jq --arg TAGNAME "${TAGNAME}" --raw-output '
               map(
-                select(.tagName == "$TAGNAME")
-              ).[].tagName'
+                select(.tagName == $TAGNAME)
+              )
+              | .[].tagName
+            '
         )"
         if [[ -n "${release}" ]]; then
           echo "Fetching SHA256SUMS from existing release: ${TAGNAME}"
@@ -65,6 +63,10 @@ runs:
           echo "No changes for ${TAGNAME} since last release. Skipping."
         else
           echo "Creating new release: ${TAGNAME}"
+
+          for s in $(echo ${SYSEXTS} | tr ';' ' '); do
+            sed "s/%%SYSEXT%%/${s}/g" .workflow-templates/systemd-sysupdate.conf > ${s}.conf
+          done
 
           {
           echo "Releases available:"
@@ -80,9 +82,9 @@ runs:
             || true
 
           gh release create \
-            --title "${SYSEXT} for Fedora (${ARCH})" \
+            --title "System extensions for Fedora" \
             --notes-file notes \
             "${TAGNAME}" \
-            --latest=false \
-            ./SHA256SUMS
+            --latest=true \
+            ./SHA256SUMS ./*.conf
         fi

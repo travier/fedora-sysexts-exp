@@ -1,2 +1,0 @@
-      - name: "Update latest release for all sysexts"
-        uses: ./.github/actions/latest

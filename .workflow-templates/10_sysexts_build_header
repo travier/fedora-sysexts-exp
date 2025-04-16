@@ -1,5 +1,5 @@
   build-%%JOBNAME%%:
-    runs-on: "ubuntu-24.04"
+    runs-on: "%%RUNSON%%"
     container:
       image: "ghcr.io/travier/fedora-sysexts-exp/buildroot:latest"
       options: "--privileged --security-opt label=disable --user 0:0"

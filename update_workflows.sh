@@ -18,13 +18,12 @@ main() {
     rm -f "./.github/workflows/containers"*".yml"
     rm -f "./.github/workflows/sysexts"*".yml"
 
-    generate "x86_64"
-    generate "aarch64"
-}
+    local -r releaseurl="https://github.com/travier/fedora-sysexts-exp/releases/download"
 
-# Generate EROFS sysexts workflows
-generate() {
-    local arch="${1}"
+    arches=(
+        'x86_64'
+        'aarch64'
+    )
 
     images=(
         'quay.io/fedora-ostree-desktops/base-atomic:41'
@@ -44,25 +43,27 @@ generate() {
     jobnames["quay.io/fedora/fedora-coreos:stable"]="fedora-coreos-stable"
     jobnames["quay.io/fedora/fedora-coreos:next"]="fedora-coreos-next"
 
-    # Get the list of sysexts for each target
+    # Get the list of sysexts for each image and each arch
     declare -A sysexts
-    for image in "${images[@]}"; do
-        list=()
-        for s in $(git ls-tree -d --name-only HEAD | grep -Ev ".github|.workflow-templates"); do
-            pushd "${s}" > /dev/null
-            # Only require the architecture to be explicitly listed for non x86_64 for now
-            if [[ "${arch}" == "x86_64" ]]; then
-                if [[ $(just targets | grep -c "${image}") == "1" ]]; then
-                    list+=("${s}")
+    for arch in "${arches[@]}"; do
+        for image in "${images[@]}"; do
+            list=()
+            for s in $(git ls-tree -d --name-only HEAD | grep -Ev ".github|.workflow-templates"); do
+                pushd "${s}" > /dev/null
+                # Only require the architecture to be explicitly listed for non x86_64 for now
+                if [[ "${arch}" == "x86_64" ]]; then
+                    if [[ $(just targets | grep -c "${image}") == "1" ]]; then
+                        list+=("${s}")
+                    fi
+                else
+                    if [[ $(just targets | grep -cE "${image} .*${arch}.*") == "1" ]]; then
+                        list+=("${s}")
+                    fi
                 fi
-            else
-                if [[ $(just targets | grep -cE "${image} .*${arch}.*") == "1" ]]; then
-                    list+=("${s}")
-                fi
-            fi
-            popd > /dev/null
+                popd > /dev/null
+            done
+            sysexts["${image}-${arch}"]="$(echo "${list[@]}" | tr ' ' ';')"
         done
-        sysexts["${image}"]="$(echo "${list[@]}" | tr ' ' ';')"
     done
 
     local -r tmpl=".workflow-templates/"
@@ -71,51 +72,41 @@ generate() {
         exit 1
     fi
 
-    if [[ "${arch}" == "x86_64" ]]; then
-        arch="x86-64"
-    fi
-
-    releaseurl="https://github.com/travier/fedora-sysexts-exp/releases/download"
-
+    # Generate EROFS sysexts workflows
     {
-    sed -e "s|%%ARCH%%|${arch}|g" \
-        -e "s|%%RELEASEURL%%|${releaseurl}|g" \
+    sed -e "s|%%RELEASEURL%%|${releaseurl}|g" \
         "${tmpl}/00_sysexts_header"
 
-    for image in "${images[@]}"; do
-        sed -e "s|%%JOBNAME%%|${jobnames["${image}"]}|g" \
-            -e "s|%%IMAGE%%|${image}|g" \
-            "${tmpl}/10_sysexts_build_header"
-        echo ""
-        for s in $(echo "${sysexts["${image}"]}" | tr ';' ' '); do
-            sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/15_sysexts_build"
+    for arch in "${arches[@]}"; do
+        runson="ubuntu-24.04"
+        if [[ "${arch}" == "aarch64" ]]; then
+            runson="ubuntu-24.04-arm"
+        fi
+        for image in "${images[@]}"; do
+            sed -e "s|%%JOBNAME%%|${jobnames["${image}"]}-${arch}|g" \
+                -e "s|%%RUNSON%%|${runson}|g" \
+                -e "s|%%IMAGE%%|${image}|g" \
+                "${tmpl}/10_sysexts_build_header"
             echo ""
+            for s in $(echo "${sysexts["${image}-${arch}"]}" | tr ';' ' '); do
+                sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/15_sysexts_build"
+                echo ""
+            done
         done
     done
-
-    # TODO: Dynamic list of jobs to depend on
-    cat "${tmpl}/20_sysexts_gather_header"
 
     all_sysexts=()
-    for image in "${images[@]}"; do
-        for s in $(echo "${sysexts["${image}"]}" | tr ';' ' '); do
-            all_sysexts+=("${s}")
+    for arch in "${arches[@]}"; do
+        for image in "${images[@]}"; do
+            for s in $(echo "${sysexts["${image}-${arch}"]}" | tr ';' ' '); do
+                all_sysexts+=("${s}")
+            done
         done
     done
-    IFS=" " read -r -a uniq_sysexts <<< "$(echo "${all_sysexts[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ')"
-    echo ""
-    for s in "${uniq_sysexts[@]}"; do
-        sed -e "s|%%SYSEXT%%|${s}|g" "${tmpl}/25_sysexts_gather"
-        echo ""
-    done
-
-    cat "${tmpl}/30_sysexts_latest"
-    } > ".github/workflows/sysexts-fedora-${arch}.yml"
-
-    # Fixup runs-on for aarch64
-    if [[ "${arch}" == "aarch64" ]]; then
-        sed -i "s/ubuntu-24.04/ubuntu-24.04-arm/g" ".github/workflows/sysexts-fedora-${arch}.yml"
-    fi
+    uniq_sysexts="$(echo "${all_sysexts[@]}" | tr ' ' '\n' | sort -u | tr '\n' ';')"
+    # TODO: Dynamic list of jobs to depend on
+    sed -e "s|%%SYSEXTS%%|${uniq_sysexts}|g" "${tmpl}/20_sysexts_gather"
+    } > ".github/workflows/sysexts-fedora.yml"
 }
 
 main "${@}"

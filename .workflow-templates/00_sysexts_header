@@ -1,8 +1,7 @@
-name: "Build sysexts for Fedora (%%ARCH%%)"
+name: "Build sysexts for Fedora"
 
 env:
   GH_TOKEN: ${{ github.token }}
-  ARCH: "%%ARCH%%"
   RELEASEURL: "%%RELEASEURL%%"
 
 on:
