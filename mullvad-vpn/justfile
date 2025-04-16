@@ -1,5 +1,5 @@
 name := "mullvad-vpn"
-packages := "MullvadVPN"
+packages := "mullvad-vpn"
 pre_commands := "rm -rf /opt && mkdir /opt"
 external_repos := "https://repository.mullvad.net/rpm/stable/mullvad.repo"
 base_images := "
@@ -10,6 +10,13 @@ quay.io/fedora-ostree-desktops/base-atomic:42 x86_64,aarch64
 import '../sysext.just'
 
 all: default
+
+# Override tok
+version:
+    #!/bin/bash
+    set -euo pipefail
+    # set -x
+    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/MullvadVPN-*.rpm > ./version
 
 install-manual:
     #!/bin/bash
