@@ -345,7 +345,7 @@ setup-rootfs target arch=arch:
     fi
 
     echo "➡️ Setting up extension config file"
-    version_id=$(podman run --rm -ti \
+    version_id=$(podman run --rm \
         --arch={{arch}} \
         --security-opt label=disable \
         "{{target}}" \
@@ -545,7 +545,7 @@ build-erofs target arch=arch:
         SUDO="sudo"
     fi
 
-    version_id=$(podman run --rm -ti \
+    version_id=$(podman run --rm \
         --arch={{arch}} \
         --security-opt label=disable \
         "{{target}}" \
@@ -556,7 +556,7 @@ build-erofs target arch=arch:
         # Remove special characters from the version
         version="$(cat ./version | sed "s/\^/_/")"
     else
-        version=$(podman run --rm -ti \
+        version=$(podman run --rm \
             --arch={{arch}} \
             --security-opt label=disable \
             "{{target}}" \
