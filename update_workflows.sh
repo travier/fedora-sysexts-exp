@@ -96,12 +96,17 @@ generate() {
     # TODO: Dynamic list of jobs to depend on
     cat "${tmpl}/20_sysexts_gather_header"
 
+    all_sysexts=()
     for image in "${images[@]}"; do
-        echo ""
         for s in $(echo "${sysexts["${image}"]}" | tr ';' ' '); do
-            sed -e "s|%%SYSEXT%%|${s}|g" "${tmpl}/25_sysexts_gather"
-            echo ""
+            all_sysexts+=("${s}")
         done
+    done
+    IFS=" " read -r -a uniq_sysexts <<< "$(echo "${all_sysexts[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ')"
+    echo ""
+    for s in "${uniq_sysexts[@]}"; do
+        sed -e "s|%%SYSEXT%%|${s}|g" "${tmpl}/25_sysexts_gather"
+        echo ""
     done
 
     cat "${tmpl}/30_sysexts_latest"
