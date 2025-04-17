@@ -5,6 +5,10 @@ nav_order: 10
 
 # openh264
 
+OpenH264 library and support for Firefox, from Cisco's OpenH264 repo.
+
+Work in progress.
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

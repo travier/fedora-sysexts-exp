@@ -5,6 +5,9 @@ nav_order: 10
 
 # monitoring
 
+Collection of monitoring tools from Fedora RPMs (`bwm-ng`, `igt-gpu-tools`,
+`iotop`) and `bandwhich` from upstream binary releases. Work in progress.
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

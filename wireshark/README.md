@@ -1,5 +1,7 @@
 # wireshark
 
+## How to use
+
 - Install the system extension
 - Add users to the `tcpdump` group:
   ```

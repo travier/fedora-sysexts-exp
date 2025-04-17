@@ -5,6 +5,8 @@ nav_order: 10
 
 # zoxide
 
+`zoxide` and `fzf` (via weak dependency).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

@@ -5,6 +5,8 @@ nav_order: 10
 
 # steam-devices
 
+`steam-devices` package only for Steam Input support. Work in progress.
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

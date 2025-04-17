@@ -5,6 +5,8 @@ nav_order: 10
 
 # steam
 
+Steam and its dependencies, from the RPM Fusion repos. Work in progress.
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

@@ -5,6 +5,8 @@ nav_order: 10
 
 # python3
 
+Only core Python 3 packages.
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

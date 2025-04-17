@@ -39,10 +39,14 @@ main() {
         {
         sed -e "s|%%SYSEXT%%|${s}|g" \
            "${tmpl}/header.md"
+        pushd "${s}" > /dev/null
+        if [[ -f "README.md" ]]; then
+            tail -n +2 README.md
+        fi
         # TODO
-        # pushd "${s}" > /dev/null
         # just targets
-        # popd > /dev/null
+        popd > /dev/null
+        echo ""
         sed -e "s|%%SYSEXT%%|${s}|g" \
             -e "s|%%EXTENSIONSURL%%|${extensionsurl}|g" \
            "${tmpl}/setup-install-update.md"

@@ -5,6 +5,10 @@ nav_order: 10
 
 # openssl
 
+Needed for the GSconnect shell extension on Silverblue
+
+See: https://github.com/fedora-silverblue/issue-tracker/issues/201
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:
