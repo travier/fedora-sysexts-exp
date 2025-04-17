@@ -25,7 +25,7 @@
 # which is distributed under the Apache License 2.0
 
 # For testing locally, use:
-# podman run --rm -ti -v $PWD/Caddyfile:/etc/caddy/Caddyfile:Z -p 8080:8080 docker.io/caddy:latest
+# podman run --rm -ti -v $PWD/Caddyfile:/etc/caddy/Caddyfile:Z -p 8080:8080 --user 1000:1000 docker.io/caddy:latest
 http://:8080 {
     vars base_dest_url "https://github.com/travier/fedora-sysexts-exp/releases/download"
 
