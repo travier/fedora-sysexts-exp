@@ -112,6 +112,18 @@ jobs:
           sysext: 'erofs-utils'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: git-absorb"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'git-absorb'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: git-delta"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'git-delta'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: google-chrome"
         uses: ./.github/actions/build
         with:
@@ -340,6 +352,18 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'erofs-utils'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: git-absorb"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'git-absorb'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: git-delta"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'git-delta'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: google-chrome"
@@ -738,6 +762,18 @@ jobs:
           sysext: 'erofs-utils'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: git-absorb"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'git-absorb'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: git-delta"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'git-delta'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: htop"
         uses: ./.github/actions/build
         with:
@@ -936,6 +972,18 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'erofs-utils'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: git-absorb"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'git-absorb'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: git-delta"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'git-delta'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: htop"
@@ -1272,4 +1320,4 @@ jobs:
       - name: "Gather all sysexts releases"
         uses: ./.github/actions/gather
         with:
-          sysexts: '1password-cli;1password-gui;bitwarden;btop;chromium;cilium-cli;cloud-hypervisor;compsize;distrobox;emacs;erofs-utils;gdb;google-chrome;htop;incus;iwd;just;krb5-workstation;kubernetes-1.29;kubernetes-1.30;kubernetes-1.31;kubernetes-1.32;kubernetes-cri-o-1.29;kubernetes-cri-o-1.30;kubernetes-cri-o-1.31;kubernetes-cri-o-1.32;libvirtd;libvirtd-desktop;microsoft-edge;mullvad-vpn;neovim;python3;ripgrep;semanage;source-foundry-hack-fonts;steam-devices;strace;tree;vim;virtctl;vscode;vscodium;wasmtime;wireguard-tools;youki;zoxide;zsh;'
+          sysexts: '1password-cli;1password-gui;bitwarden;btop;chromium;cilium-cli;cloud-hypervisor;compsize;distrobox;emacs;erofs-utils;gdb;git-absorb;git-delta;google-chrome;htop;incus;iwd;just;krb5-workstation;kubernetes-1.29;kubernetes-1.30;kubernetes-1.31;kubernetes-1.32;kubernetes-cri-o-1.29;kubernetes-cri-o-1.30;kubernetes-cri-o-1.31;kubernetes-cri-o-1.32;libvirtd;libvirtd-desktop;microsoft-edge;mullvad-vpn;neovim;python3;ripgrep;semanage;source-foundry-hack-fonts;steam-devices;strace;tree;vim;virtctl;vscode;vscodium;wasmtime;wireguard-tools;youki;zoxide;zsh;'
