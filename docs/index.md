@@ -46,10 +46,10 @@ restart systemd-sysext.service` instead of `systemd-sysext merge`.
 `systemd-sysext unmerge` is safe to use.
 
 See:
-- https://github.com/coreos/fedora-coreos-tracker/issues/1744
-- https://github.com/systemd/systemd/issues/34387
-- https://github.com/systemd/systemd/pull/34414
-- https://github.com/systemd/systemd/pull/35132
+- <https://github.com/coreos/fedora-coreos-tracker/issues/1744>
+- <https://github.com/systemd/systemd/issues/34387>
+- <https://github.com/systemd/systemd/pull/34414>
+- <https://github.com/systemd/systemd/pull/35132>
 
 ## Current limitation of systemd-sysupdate
 
