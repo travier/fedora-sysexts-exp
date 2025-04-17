@@ -24,6 +24,13 @@
 # https://github.com/flatcar/sysext-bakery/blob/main/tools/http-url-rewrite-server/Caddyfile
 # which is distributed under the Apache License 2.0
 
+{
+    # Disable admin interface
+    admin off
+    # Only use the explicitly provided config
+    persist_config off
+}
+
 # For testing locally, use:
 # podman run --rm -ti -v $PWD/Caddyfile:/etc/caddy/Caddyfile:Z -p 8080:8080 --user 1000:1000 docker.io/caddy:latest
 http://:8080 {
