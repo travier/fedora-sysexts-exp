@@ -11,3 +11,5 @@ digest
 scripts
 json
 /.dnf-cache/
+/docs/vendor
+/docs/_site

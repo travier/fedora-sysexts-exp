@@ -1,0 +1,41 @@
+title: "Fedora sysexts"
+description: "Experimental systemd system extensions (sysexts) for Fedora image based systems"
+baseurl: "/fedora-sysexts-exp"
+# url: "https://travier.github.io"
+url: "https://localhost:4000"
+permalink: "/:title/"
+# markdown: "kramdown"
+# kramdown:
+#   typographic_symbols:
+#     ndash: "--"
+#     mdash: "---"
+
+theme: "just-the-docs"
+# remote_theme: just-the-docs/just-the-docs@v0.8.1
+# plugins:
+#   - jekyll-remote-theme
+
+# Aux links for the upper right navigation
+aux_links:
+  "Sources on GitHub":
+    - "https://github.com/travier/fedora-sysexts-exp"
+
+# Footer last edited timestamp
+last_edit_timestamp: true
+last_edit_time_format: "%b %e %Y at %I:%M %p"
+
+# Footer "Edit this page on GitHub" link text
+gh_edit_link: true
+gh_edit_link_text: "Edit this page on GitHub"
+gh_edit_repository: "https://github.com/travier/fedora-sysexts-exp"
+gh_edit_branch: "main"
+gh_edit_source: "docs"
+gh_edit_view_mode: "tree"
+
+compress_html:
+  clippings: all
+  comments: all
+  endings: all
+  startings: []
+  blanklines: false
+  profile: false
