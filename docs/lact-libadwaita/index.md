@@ -1,20 +1,9 @@
 ---
-title: lact-libadwaita sysext
+title: lact-libadwaita
 nav_order: 10
 ---
 
 # lact-libadwaita
-
-## Compatible images
-
-```
-quay.io/fedora-ostree-desktops/silverblue:41
-quay.io/fedora-ostree-desktops/silverblue:42
-```
-
-## Versions available
-
-TODO
 
 ## First time setup
 
@@ -31,12 +20,12 @@ Define a helper function and then install the sysext:
 
 ```
 install_sysext() {
-  URL="https://extensions.fcos.fr/extensions"
   SYSEXT="${1}"
+  URL="https://extensions.fcos.fr/extensions"
   sudo install -d -m 0755 -o 0 -g 0 /etc/sysupdate.${SYSEXT}.d
   sudo restorecon -RFv /etc/sysupdate.${SYSEXT}.d
-  curl --silent --fail --location "${URL}/${SYSEXT}.conf" | sudo tee "/etc/sysupdate.${SYSEXT}.d/${SYSEXT}.conf"
-  sudo /usr/lib/systemd/systemd-sysupdate components
+  curl --silent --fail --location "${URL}/${SYSEXT}.conf" \
+    | sudo tee "/etc/sysupdate.${SYSEXT}.d/${SYSEXT}.conf"
   sudo /usr/lib/systemd/systemd-sysupdate update --component "${SYSEXT}"
 }
 
@@ -53,8 +42,7 @@ systemd-sysext status
 ## Updating the sysext
 
 ```
-SYSEXT="lact-libadwaita"
-sudo /usr/lib/systemd/systemd-sysupdate update --component ${SYSEXT}
+sudo /usr/lib/systemd/systemd-sysupdate update --component lact-libadwaita
 sudo systemctl restart systemd-sysext.service
 systemd-sysext status
 ```
