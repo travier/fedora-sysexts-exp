@@ -11,46 +11,25 @@ or other Bootable Container systems (and classic ostree/rpm-ostree systems).
 
 ## What are sysexts?
 
-TODO
+See the
+[Extension Images](https://uapi-group.org/specifications/specs/extension_image/)
+specification from the UAPI group.
 
 ## Available sysexts
 
-TODO
+You can find all the available sysexts in the list on the side of this page.
 
-## Installing and updating using systemd-sysupdate
+## Installing and updating using `systemd-sysupdate`
 
-In the meantime, you can use systemd-sysupdate to manually install and update
-them:
+You can currently install and update those sysexts using `systemd-sysupdate`.
+See the individual pages for instructions.
 
-```
-$ sudo install -d -m 0755 -o 0 -g 0 /var/lib/extensions /var/lib/extensions.d
-$ sudo restorecon -RFv /var/lib/extensions /var/lib/extensions.d
-```
-
-```
-$ URL="https://extensions.fcos.fr/extensions/"
-$ SYSEXT="htop"
-$ sudo install -d -m 0755 -o 0 -g 0 /etc/sysupdate.${SYSEXT}.d
-$ sudo restorecon -RFv /etc/sysupdate.${SYSEXT}.d
-$ curl --silent --fail --location "${URL}/${SYSEXT}.conf" | sudo tee "/etc/sysupdate.${SYSEXT}.d/${SYSEXT}.conf"
-$ sudo /usr/lib/systemd/systemd-sysupdate components
-$ sudo /usr/lib/systemd/systemd-sysupdate update --component "${SYSEXT}"
-$ sudo systemctl restart systemd-sysext.service
-$ systemd-sysext status
-```
-
-Then any further updates can be done with:
-
-```
-$ SYSEXT="htop"
-$ sudo /usr/lib/systemd/systemd-sysupdate update --component ${SYSEXT}
-$ sudo systemctl restart systemd-sysext.service
-$ systemd-sysext status
-```
-
-TODO
+You can also directly download the sysexts images as files in a Butane config
+for example.
 
 ## Know issues
+
+### Use `systemctl restart systemd-sysext.service` to refresh sysexts
 
 Until systemd v257 is released and lands in Fedora, make sure to use `systemctl
 restart systemd-sysext.service` instead of `systemd-sysext merge`.
@@ -61,6 +40,14 @@ See:
 - https://github.com/systemd/systemd/issues/34387
 - https://github.com/systemd/systemd/pull/34414
 - https://github.com/systemd/systemd/pull/35132
+
+## Current limitation of systemd-sysupdate
+
+While installing and updating via `systemd-sysupdate` works, this also has a
+few limitations (thus the experimental status): The sysexts are enabled
+"statically" for all deplpoyments and if you rebase between major Fedora
+versions, the sysexts will not match the Fedora release and will not be loaded
+until you update again using `systemd-sysupdate`.
 
 ## Building, contributing and license
 

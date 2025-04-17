@@ -1,10 +1,7 @@
 ---
-title: %%SYSEXT%% sysext
+title: %%SYSEXT%%
 nav_order: 10
 ---
 
 # %%SYSEXT%%
 
-## Compatible images
-
-```

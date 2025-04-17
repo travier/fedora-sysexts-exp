@@ -38,14 +38,14 @@ main() {
         mkdir -p "docs/${s}"
         {
         sed -e "s|%%SYSEXT%%|${s}|g" \
-            -e "s|%%EXTENSIONSURL%%|${extensionsurl}|g" \
            "${tmpl}/header.md"
-        pushd "${s}" > /dev/null
-        just targets
-        popd > /dev/null
+        # TODO
+        # pushd "${s}" > /dev/null
+        # just targets
+        # popd > /dev/null
         sed -e "s|%%SYSEXT%%|${s}|g" \
             -e "s|%%EXTENSIONSURL%%|${extensionsurl}|g" \
-           "${tmpl}/body.md"
+           "${tmpl}/setup-install-update.md"
         } > "docs/${s}/index.md"
     done
 }
