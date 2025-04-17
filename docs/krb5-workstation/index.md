@@ -1,6 +1,6 @@
 ---
 title: krb5-workstation
-nav_order: 10
+nav_order: 25
 ---
 
 # krb5-workstation

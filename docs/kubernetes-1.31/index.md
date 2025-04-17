@@ -1,6 +1,6 @@
 ---
 title: kubernetes-1.31
-nav_order: 10
+nav_order: 28
 ---
 
 # kubernetes-1.31

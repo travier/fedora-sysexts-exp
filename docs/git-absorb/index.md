@@ -1,6 +1,6 @@
 ---
 title: git-absorb
-nav_order: 10
+nav_order: 17
 ---
 
 # git-absorb

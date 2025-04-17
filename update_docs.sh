@@ -34,10 +34,14 @@ main() {
         exit 1
     fi
 
+    navorder=1
+
     for s in $(git ls-tree -d --name-only HEAD | grep -Ev ".github|.workflow-templates|docs"); do
+        navorder=$((navorder+1))
         mkdir -p "docs/${s}"
         {
         sed -e "s|%%SYSEXT%%|${s}|g" \
+            -e "s|%%NAVORDER%%|${navorder}|g" \
            "${tmpl}/header.md"
         pushd "${s}" > /dev/null
         if [[ -f "README.md" ]]; then

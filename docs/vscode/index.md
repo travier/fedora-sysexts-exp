@@ -1,6 +1,6 @@
 ---
 title: vscode
-nav_order: 10
+nav_order: 54
 ---
 
 # vscode

@@ -1,6 +1,6 @@
 ---
 title: 1password-cli
-nav_order: 10
+nav_order: 2
 ---
 
 # 1password-cli

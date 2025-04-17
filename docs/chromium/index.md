@@ -1,6 +1,6 @@
 ---
 title: chromium
-nav_order: 10
+nav_order: 6
 ---
 
 # chromium

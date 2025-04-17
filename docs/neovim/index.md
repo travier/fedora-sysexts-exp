@@ -1,6 +1,6 @@
 ---
 title: neovim
-nav_order: 10
+nav_order: 41
 ---
 
 # neovim

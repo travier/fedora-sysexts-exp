@@ -1,6 +1,6 @@
 ---
 title: fuse2
-nav_order: 10
+nav_order: 15
 ---
 
 # fuse2

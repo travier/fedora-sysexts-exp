@@ -1,6 +1,6 @@
 ---
 title: ripgrep
-nav_order: 10
+nav_order: 45
 ---
 
 # ripgrep

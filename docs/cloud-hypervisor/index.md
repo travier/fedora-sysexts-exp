@@ -1,6 +1,6 @@
 ---
 title: cloud-hypervisor
-nav_order: 10
+nav_order: 8
 ---
 
 # cloud-hypervisor

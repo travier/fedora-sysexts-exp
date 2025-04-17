@@ -1,6 +1,6 @@
 ---
 title: wireguard-tools
-nav_order: 10
+nav_order: 57
 ---
 
 # wireguard-tools

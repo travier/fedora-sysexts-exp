@@ -1,6 +1,6 @@
 ---
 title: steam-devices
-nav_order: 10
+nav_order: 48
 ---
 
 # steam-devices

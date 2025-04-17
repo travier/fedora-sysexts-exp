@@ -1,6 +1,6 @@
 ---
 title: compsize
-nav_order: 10
+nav_order: 9
 ---
 
 # compsize

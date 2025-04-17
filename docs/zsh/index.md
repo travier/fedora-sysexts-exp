@@ -1,6 +1,6 @@
 ---
 title: zsh
-nav_order: 10
+nav_order: 61
 ---
 
 # zsh

@@ -1,6 +1,6 @@
 ---
 title: 1password-gui
-nav_order: 10
+nav_order: 3
 ---
 
 # 1password-gui

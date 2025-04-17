@@ -1,6 +1,6 @@
 ---
 title: kubernetes-cri-o-1.32
-nav_order: 10
+nav_order: 33
 ---
 
 # kubernetes-cri-o-1.32
