@@ -5,6 +5,8 @@ nav_order: 10
 
 # iwd
 
+Better WiFi daemon and config for NetworkManager to use it by default.
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

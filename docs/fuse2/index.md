@@ -5,6 +5,10 @@ nav_order: 10
 
 # fuse2
 
+The `fuse` tools and library, version 2, for AppImage compatibility.
+
+See: <https://gitlab.com/fedora/ostree/sig/-/issues/50>
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

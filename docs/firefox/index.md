@@ -5,6 +5,8 @@ nav_order: 10
 
 # firefox
 
+Enables use on dowstream images such as Bazzite and Bluefin which remove Firefox.
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:
