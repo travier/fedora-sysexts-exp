@@ -27,6 +27,16 @@ See the individual pages for instructions.
 You can also directly download the sysexts images as files in a Butane config
 for example.
 
+## Updating all installed sysexst
+
+Example to update all sysexts on a system:
+
+```
+for c in $(/usr/lib/systemd/systemd-sysupdate components --json=short | jq --raw-output '.components[]'); do
+    sudo /usr/lib/systemd/systemd-sysupdate update --component "${c}"
+done
+```
+
 ## Know issues
 
 ### Use `systemctl restart systemd-sysext.service` to refresh sysexts
