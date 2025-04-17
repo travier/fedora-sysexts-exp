@@ -300,7 +300,8 @@ version:
     fi
 
     # Only one package listed, let's use its version
-    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/${packages[0]}*.rpm > ./version
+    rpm="$(ls rpms/${packages[0]}*.rpm | sort -h | head -1)"
+    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' ${rpm} > ./version
 
 # Sets up the rootfs directory and creates the extension release config
 setup-rootfs target arch=arch:
