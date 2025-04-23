@@ -1,8 +1,8 @@
-name: "Gather all sysexts in a 'latest' release"
-description: "Publish the 'latest' release that references all available sysexts"
+name: "Gather all version for a given sysext"
+description: "Publish a release that references all available versions for a sysext"
 inputs:
-  sysexts:
-    description: "The list of sysexts to generate systemd sysupdate configs for (names separated by semicolon)"
+  sysext:
+    description: "The sysext to generate the release for"
     required: true
 
 # This composite action needs the RELEASEURL environment variables to be set at
@@ -11,7 +11,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: "Publish 'latest' release"
+    - name: "Publish release"
       env:
         GH_TOKEN: ${{ github.token }}
         SYSEXTS: ${{ inputs.sysexts }}

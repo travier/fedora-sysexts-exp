@@ -1,0 +1,4 @@
+      - name: "Gather all version for sysext %%SYSEXT%%"
+        uses: ./.github/actions/gather
+        with:
+          sysext: '%%SYSEXT%%'
