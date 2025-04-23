@@ -1,5 +1,7 @@
 # Example sysexts for Fedora image based systems
 
+**This is the old README and is not up-to-date.**
+
 For Fedora CoreOS, Atomic Desktops, IoT, or other Bootable Container systems
 (and classic ostree/rpm-ostree systems).
 
