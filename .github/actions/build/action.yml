@@ -61,7 +61,7 @@ runs:
 
         old=""
         TAGNAME="${SYSEXT}-${VERSION}-${VERSION_ID}-${ARCH}"
-        echo "Fetching info from existing release: ${release}"
+        echo "Fetching info from existing release: ${TAGNAME}"
         curl --location --fail --output digest.old  "${RELEASEURL}/${TAGNAME}/digest"  || touch digest.old
         curl --location --fail --output inputs.old  "${RELEASEURL}/${TAGNAME}/inputs"  || touch inputs.old
         curl --location --fail --output scripts.old "${RELEASEURL}/${TAGNAME}/scripts" || touch scripts.old
