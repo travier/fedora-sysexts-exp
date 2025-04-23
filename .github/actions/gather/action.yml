@@ -14,7 +14,7 @@ runs:
     - name: "Publish release"
       env:
         GH_TOKEN: ${{ github.token }}
-        SYSEXTS: ${{ inputs.sysexts }}
+        SYSEXT: ${{ inputs.sysext }}
       if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
       shell: bash
       run: |
