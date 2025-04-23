@@ -301,7 +301,14 @@ version:
 
     # Only one package listed, let's use its version
     rpm="$(ls rpms/${packages[0]}*.rpm | sort -h | head -1)"
-    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' ${rpm} > ./version
+    epoch="$(rpm -qp --queryformat '%{EPOCH}' ${rpm})"
+    version="$(rpm -qp --queryformat '%{VERSION}-%{RELEASE}' ${rpm})"
+    if [[ "${epoch}" == "(none)" ]]; then
+        epoch=""
+    else
+        epoch="${epoch}-"
+    fi
+    echo "${epoch}${version}" > ./version
 
 # Sets up the rootfs directory and creates the extension release config
 setup-rootfs target arch=arch:
@@ -555,7 +562,7 @@ build-erofs target arch=arch:
     version=""
     if [[ -f ./version ]]; then
         # Remove special characters from the version
-        version="$(cat ./version | sed "s/\^/_/")"
+        version="$(cat ./version | sed "s/\^/_/" | sed "s/:/_/")"
     else
         version=$(podman run --rm \
             --arch={{arch}} \

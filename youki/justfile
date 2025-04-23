@@ -37,7 +37,7 @@ download-manual arch=arch:
     tar xf youki-${version}-${arch}-gnu.tar.gz
     rm youki-${version}-${arch}-gnu.tar.gz README.md
 
-# Skip default version recipe
+# Skip default recipe
 version:
     true
 

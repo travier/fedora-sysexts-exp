@@ -41,7 +41,7 @@ download-manual arch=arch:
     echo "${version#v}" > ../version
     sha256sum cilium-linux-${arch}.tar.gz LICENSE >> ../inputs
 
-# Ignore default recipe
+# Skip default recipe
 version:
     true
 

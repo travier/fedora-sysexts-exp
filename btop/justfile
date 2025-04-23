@@ -10,10 +10,4 @@ quay.io/fedora-ostree-desktops/base-atomic:42 x86_64,aarch64
 
 import '../sysext.just'
 
-version:
-    #!/bin/bash
-    set -euo pipefail
-    # set -x
-    rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/btop*.rpm > ./version
-
 all: default

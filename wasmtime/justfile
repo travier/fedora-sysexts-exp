@@ -37,7 +37,7 @@ download-manual arch=arch:
     echo "${version}" > ../version
     echo "${sha256sum}  ${destfile}" > ../inputs
 
-# Skip default version recipe
+# Skip default recipe
 version:
     true
 
