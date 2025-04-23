@@ -107,8 +107,8 @@ main() {
         done
     done
     for s in $(echo "${all_sysexts[@]}" | tr ' ' '\n' | sort -u); do
-        sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/25_sysexts_gather"
         echo ""
+        sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/25_sysexts_gather"
     done
     } > ".github/workflows/sysexts-fedora.yml"
 }
