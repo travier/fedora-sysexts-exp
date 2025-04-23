@@ -48,11 +48,6 @@ runs:
 
         git config --global --add safe.directory "${PWD}"
 
-        # Redefine grep to not fail when there are no matches
-        grep() {
-          /usr/bin/grep "$@" || test $? = 1
-        }
-
         cd "${SYSEXT}"
         sha256sum *.raw > SHA256SUMS
 
@@ -66,22 +61,11 @@ runs:
 
         old=""
         TAGNAME="${SYSEXT}-${VERSION}-${VERSION_ID}-${ARCH}"
-        release="$(
-          gh release list --limit 1000 --json tagName \
-            | jq --arg TAGNAME "${TAGNAME}" --raw-output '
-                map(
-                  select(.tagName == $TAGNAME)
-                )
-                | .[].tagName
-              '
-        )"
-        if [[ -n "${release}" ]]; then
-          echo "Fetching info from existing release: ${release}"
-          curl --location --output digest.old  "${RELEASEURL}/${release}/digest"
-          curl --location --output inputs.old  "${RELEASEURL}/${release}/inputs"
-          curl --location --output scripts.old "${RELEASEURL}/${release}/scripts"
-          old="$(cat digest.old inputs.old scripts.old | sha256sum)"
-        fi
+        echo "Fetching info from existing release: ${release}"
+        curl --location --fail --output digest.old  "${RELEASEURL}/${TAGNAME}/digest"  || touch digest.old
+        curl --location --fail --output inputs.old  "${RELEASEURL}/${TAGNAME}/inputs"  || touch inputs.old
+        curl --location --fail --output scripts.old "${RELEASEURL}/${TAGNAME}/scripts" || touch scripts.old
+        old="$(cat digest.old inputs.old scripts.old | sha256sum)"
 
         if [[ "${new}" == "${old}" ]]; then
           echo "No changes in inputs since last release. Skipping."

@@ -96,8 +96,6 @@ main() {
     done
 
     # TODO: Dynamic list of jobs to depend on
-    cat "${tmpl}/20_sysexts_gather_header"
-
     all_sysexts=()
     for arch in "${arches[@]}"; do
         for image in "${images[@]}"; do
@@ -106,10 +104,8 @@ main() {
             done
         done
     done
-    for s in $(echo "${all_sysexts[@]}" | tr ' ' '\n' | sort -u); do
-        echo ""
-        sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/25_sysexts_gather"
-    done
+    uniq_sysexts="$(echo "${all_sysexts[@]}" | tr ' ' '\n' | sort -u | tr '\n' ';')"
+    sed -e "s|%%SYSEXTS%%|${uniq_sysexts}|g" "${tmpl}/20_sysexts_gather"
     } > ".github/workflows/sysexts-fedora.yml"
 }
 
