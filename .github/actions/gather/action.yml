@@ -28,7 +28,7 @@ runs:
           TAGNAME="${SYSEXT}"
           releases=(
             $(
-              echo "${releases_json} \
+              echo "${releases_json}" \
                 | jq --arg TAGNAME "${TAGNAME}" --raw-output '
                   map(
                     select(
