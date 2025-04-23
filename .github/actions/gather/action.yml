@@ -20,15 +20,19 @@ runs:
       run: |
         set -euxo pipefail
 
-        rm -f SHA256SUMS*
+        rm -f ./SHA256SUMS* ./*.conf
 
-        TAGNAME="latest"
+        TAGNAME="${SYSEXT}"
         releases=(
           $(
-            gh release list --limit 1000 --json tagName \
+            gh release list --limit 10000 --json tagName \
               | jq --arg TAGNAME "${TAGNAME}" --raw-output '
                 map(
-                  select(.tagName != $TAGNAME)
+                  select(
+                    (.tagName | startswith($TAGNAME))
+                    and
+                    (.tagName != $TAGNAME)
+                  )
                 )
                 | .[].tagName
               ' \
@@ -45,7 +49,7 @@ runs:
 
         old=""
         release="$(
-          gh release list --limit 1000 --json tagName \
+          gh release list --limit 10000 --json tagName \
             | jq --arg TAGNAME "${TAGNAME}" --raw-output '
               map(
                 select(.tagName == $TAGNAME)
@@ -64,12 +68,10 @@ runs:
         else
           echo "Creating new release: ${TAGNAME}"
 
-          for s in $(echo ${SYSEXTS} | tr ';' ' '); do
-            sed "s/%%SYSEXT%%/${s}/g" .workflow-templates/systemd-sysupdate.conf > ${s}.conf
-          done
+          sed "s/%%SYSEXT%%/${SYSEXT}/g" .workflow-templates/systemd-sysupdate.conf > ${SYSEXT}.conf
 
           {
-          echo "Releases available:"
+          echo "Versions available:"
           echo "\`\`\`"
           cat ./SHA256SUMS
           echo "\`\`\`"
@@ -82,9 +84,9 @@ runs:
             || true
 
           gh release create \
-            --title "System extensions for Fedora" \
+            --title "${SYSEXT} systemd system extensions for Fedora" \
             --notes-file notes \
             "${TAGNAME}" \
-            --latest=true \
-            ./SHA256SUMS ./*.conf
+            --latest=false \
+            ./SHA256SUMS ./${SYSEXT}.conf
         fi
