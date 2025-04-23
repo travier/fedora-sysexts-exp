@@ -12,6 +12,10 @@ See:
 - <https://github.com/ganto/copr-lxc4/wiki/Getting-Started-with-Incus-on-Fedora>
 - <https://copr.fedorainfracloud.org/coprs/ganto/lxc4/>
 
+## Versions available
+
+See the [incus versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/incus).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

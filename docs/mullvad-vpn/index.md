@@ -9,6 +9,10 @@ Mullvad VPN (including daemon and GUI frontend) from their official repositories
 
 See: <https://mullvad.net/en/help/install-mullvad-app-linux>
 
+## Versions available
+
+See the [mullvad-vpn versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/mullvad-vpn).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

@@ -7,6 +7,10 @@ nav_order: 49
 
 Steam and its dependencies, from the RPM Fusion repos. Work in progress.
 
+## Versions available
+
+See the [steam versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/steam).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

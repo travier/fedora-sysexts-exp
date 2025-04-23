@@ -7,6 +7,10 @@ nav_order: 48
 
 `steam-devices` package only for Steam Input support. Work in progress.
 
+## Versions available
+
+See the [steam-devices versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/steam-devices).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

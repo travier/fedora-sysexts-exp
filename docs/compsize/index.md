@@ -5,6 +5,10 @@ nav_order: 9
 
 # compsize
 
+## Versions available
+
+See the [compsize versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/compsize).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

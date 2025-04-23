@@ -15,6 +15,7 @@ main() {
     # TODO: Remove existing directories in docs
 
     local -r extensionsurl="https://extensions.fcos.fr/extensions"
+    local -r releaseurl="https://github.com/travier/fedora-sysexts-exp/releases/tag"
 
     # arches=(
     #     'x86_64'
@@ -52,6 +53,7 @@ main() {
         popd > /dev/null
         echo ""
         sed -e "s|%%SYSEXT%%|${s}|g" \
+            -e "s|%%RELEASEURL%%|${releaseurl}|g" \
             -e "s|%%EXTENSIONSURL%%|${extensionsurl}|g" \
            "${tmpl}/setup-install-update.md"
         } > "docs/${s}/index.md"

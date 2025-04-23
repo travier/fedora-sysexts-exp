@@ -5,6 +5,10 @@ nav_order: 19
 
 # google-chrome
 
+## Versions available
+
+See the [google-chrome versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/google-chrome).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

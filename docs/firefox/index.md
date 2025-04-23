@@ -7,6 +7,10 @@ nav_order: 14
 
 Enables use on dowstream images such as Bazzite and Bluefin which remove Firefox.
 
+## Versions available
+
+See the [firefox versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/firefox).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

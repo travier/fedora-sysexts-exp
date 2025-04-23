@@ -1,3 +1,7 @@
+## Versions available
+
+See the [%%SYSEXT%% versions](%%RELEASEURL%%/%%SYSEXT%%).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

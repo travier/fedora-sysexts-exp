@@ -5,6 +5,10 @@ nav_order: 53
 
 # virtctl
 
+## Versions available
+
+See the [virtctl versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/virtctl).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

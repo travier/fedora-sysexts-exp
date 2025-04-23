@@ -9,6 +9,10 @@ The `fuse` tools and library, version 2, for AppImage compatibility.
 
 See: <https://gitlab.com/fedora/ostree/sig/-/issues/50>
 
+## Versions available
+
+See the [fuse2 versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/fuse2).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

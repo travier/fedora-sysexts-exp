@@ -8,6 +8,10 @@ nav_order: 38
 Collection of monitoring tools from Fedora RPMs (`bwm-ng`, `igt-gpu-tools`,
 `iotop`) and `bandwhich` from upstream binary releases. Work in progress.
 
+## Versions available
+
+See the [monitoring versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/monitoring).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

@@ -3,7 +3,3 @@
 ```
 
 ```
-
-## Versions available
-
-TODO

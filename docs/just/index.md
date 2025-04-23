@@ -5,6 +5,10 @@ nav_order: 23
 
 # just
 
+## Versions available
+
+See the [just versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/just).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

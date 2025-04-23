@@ -7,6 +7,10 @@ nav_order: 6
 
 Alternative to the Flatpak which has known limitations.
 
+## Versions available
+
+See the [chromium versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/chromium).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

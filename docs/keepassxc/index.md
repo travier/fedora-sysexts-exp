@@ -7,6 +7,10 @@ nav_order: 24
 
 Alternative to the Flatpak which has known limitations.
 
+## Versions available
+
+See the [keepassxc versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/keepassxc).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

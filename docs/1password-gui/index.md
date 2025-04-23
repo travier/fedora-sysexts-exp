@@ -5,6 +5,10 @@ nav_order: 3
 
 # 1password-gui
 
+## Versions available
+
+See the [1password-gui versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/1password-gui).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

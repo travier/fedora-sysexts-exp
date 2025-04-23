@@ -5,6 +5,10 @@ nav_order: 50
 
 # strace
 
+## Versions available
+
+See the [strace versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/strace).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

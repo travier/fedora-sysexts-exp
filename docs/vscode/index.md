@@ -9,6 +9,10 @@ Visual Studio Code from the official RPM.
 
 See: <https://code.visualstudio.com/docs/setup/linux#_rhel-fedora-and-centos-based-distributions>
 
+## Versions available
+
+See the [vscode versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/vscode).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

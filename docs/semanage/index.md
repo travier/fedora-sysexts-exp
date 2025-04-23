@@ -7,6 +7,10 @@ nav_order: 46
 
 SELinux utilities, including those that require Python.
 
+## Versions available
+
+See the [semanage versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/semanage).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

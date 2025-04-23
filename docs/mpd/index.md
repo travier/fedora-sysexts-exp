@@ -33,6 +33,10 @@ Use localhost and port 6600 to connect with the client.
 
 MPD is in RPMFusion, mpDris2 behaves weirdly/can't autostart in a quadlet/distrobox.
 
+## Versions available
+
+See the [mpd versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/mpd).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

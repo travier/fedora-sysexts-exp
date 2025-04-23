@@ -5,6 +5,10 @@ nav_order: 13
 
 # erofs-utils
 
+## Versions available
+
+See the [erofs-utils versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/erofs-utils).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

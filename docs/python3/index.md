@@ -7,6 +7,10 @@ nav_order: 44
 
 Only core Python 3 packages.
 
+## Versions available
+
+See the [python3 versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/python3).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

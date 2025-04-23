@@ -12,6 +12,10 @@ container runtime such as `containerd`, either from Fedora's packages or the
 For Kubernetes and CRI-O in a single system extension, see `kubernetes-cri-o-<version>` ones.
 For CRI-O only, see the `cri-o-<version>` ones.
 
+## Versions available
+
+See the [kubernetes-1.31 versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/kubernetes-1.31).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

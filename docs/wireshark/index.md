@@ -27,6 +27,10 @@ This requires some manual setup so using this sysext should be easier.
 
 See: <https://github.com/fedora-silverblue/issue-tracker/issues/50>
 
+## Versions available
+
+See the [wireshark versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/wireshark).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

@@ -7,6 +7,10 @@ nav_order: 25
 
 Kerberos support.
 
+## Versions available
+
+See the [krb5-workstation versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/krb5-workstation).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

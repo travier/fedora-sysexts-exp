@@ -5,6 +5,10 @@ nav_order: 16
 
 # gdb
 
+## Versions available
+
+See the [gdb versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/gdb).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

@@ -5,6 +5,10 @@ nav_order: 2
 
 # 1password-cli
 
+## Versions available
+
+See the [1password-cli versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/1password-cli).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

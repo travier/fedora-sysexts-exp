@@ -5,6 +5,10 @@ nav_order: 51
 
 # tree
 
+## Versions available
+
+See the [tree versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/tree).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

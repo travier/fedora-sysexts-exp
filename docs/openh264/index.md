@@ -9,6 +9,10 @@ OpenH264 library and support for Firefox, from Cisco's OpenH264 repo.
 
 Work in progress.
 
+## Versions available
+
+See the [openh264 versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/openh264).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

@@ -5,6 +5,10 @@ nav_order: 36
 
 # microsoft-edge
 
+## Versions available
+
+See the [microsoft-edge versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/microsoft-edge).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

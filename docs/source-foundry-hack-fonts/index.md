@@ -5,6 +5,10 @@ nav_order: 47
 
 # source-foundry-hack-fonts
 
+## Versions available
+
+See the [source-foundry-hack-fonts versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/source-foundry-hack-fonts).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

@@ -5,6 +5,10 @@ nav_order: 20
 
 # htop
 
+## Versions available
+
+See the [htop versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/htop).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

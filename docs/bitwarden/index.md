@@ -14,6 +14,10 @@ functionality, some features (e.g.: biometrics autosetup and the ssh-agent sock
 present at `$HOME/.bitwarden-ssh-agent.sock` ) are still only available in the
 non-sandboxed version of the app.
 
+## Versions available
+
+See the [bitwarden versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/bitwarden).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:

@@ -5,6 +5,10 @@ nav_order: 8
 
 # cloud-hypervisor
 
+## Versions available
+
+See the [cloud-hypervisor versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/cloud-hypervisor).
+
 ## First time setup
 
 Run those commands if you have not yet installed any sysext on your system:
