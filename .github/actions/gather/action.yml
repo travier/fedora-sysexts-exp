@@ -25,16 +25,15 @@ runs:
         for sysext in $(echo ${SYSEXTS} | tr ';' ' '); do
           rm -f ./SHA256SUMS* ./*.conf
 
-          TAGNAME="${SYSEXT}"
           releases=(
             $(
               echo "${releases_json}" \
-                | jq --arg TAGNAME "${TAGNAME}" --raw-output '
+                | jq --arg SYSEXT "${sysext}" --raw-output '
                   map(
                     select(
-                      (.tagName | startswith($TAGNAME))
+                      (.tagName | startswith($SYSEXT))
                       and
-                      (.tagName != $TAGNAME)
+                      (.tagName != $SYSEXT)
                     )
                   )
                   | .[].tagName
@@ -51,14 +50,14 @@ runs:
           new="$(cat SHA256SUMS | sha256sum)"
 
           old=""
-          echo "Fetching SHA256SUMS from existing release: ${TAGNAME}"
-          curl --location --fail --output SHA256SUMS.old "${RELEASEURL}/${TAGNAME}/SHA256SUMS" || touch SHA256SUMS.old
+          echo "Fetching SHA256SUMS from release: ${sysext}"
+          curl --location --fail --output SHA256SUMS.old "${RELEASEURL}/${sysext}/SHA256SUMS" || touch SHA256SUMS.old
           old="$(cat SHA256SUMS.old | sha256sum)"
 
           if [[ "${new}" == "${old}" ]]; then
-            echo "No changes for ${TAGNAME} since last release. Skipping."
+            echo "No changes for ${sysext} since last release. Skipping."
           else
-            echo "Creating new release: ${TAGNAME}"
+            echo "Creating new release: ${sysext}"
 
             sed "s/%%SYSEXT%%/${sysext}/g" .workflow-templates/systemd-sysupdate.conf > ${sysext}.conf
 
@@ -72,13 +71,13 @@ runs:
             gh release delete \
               --cleanup-tag \
               --yes \
-              "${TAGNAME}" \
+              "${sysext}" \
               || true
 
             gh release create \
-              --title "${SYSEXT} systemd system extensions for Fedora" \
+              --title "${sysext} systemd system extensions for Fedora" \
               --notes-file notes \
-              "${TAGNAME}" \
+              "${sysext}" \
               --latest=false \
               ./SHA256SUMS ./${sysext}.conf
           fi
