@@ -42,17 +42,29 @@ http://:8080 {
     @raw path_regexp raw ^.*/extensions/([^/]+)/([^/]+).raw$
     redir @raw {vars.base_dest_url}/{re.raw.2}/{re.raw.2}.raw
 
-    # sysupdate conf
+    # Extension sysupdate conf (short URL for installation)
+    #   <name>.conf
+    #     ==>  https://[...]/releases/download/<name>/<name>.conf
+    @gconf path_regexp conf ^.*/extensions/([^/]+).conf$
+    redir @gconf {vars.base_dest_url}/{re.gconf.1}/{re.gconf.1}.conf
+
+    # Extension sysupdate conf (namespaced URL)
     #   <name>/<name>.conf
     #     ==>  https://[...]/releases/download/<name>/<name>.conf
-    @conf path_regexp conf ^.*/extensions/([^/]+).conf$
-    redir @conf {vars.base_dest_url}/{re.conf.1}/{re.conf.1}.conf
+    @econf path_regexp conf ^.*/extensions/([^/]+)/([^/]+).conf$
+    redir @econf {vars.base_dest_url}/{re.econf.1}/{re.econf.1}.conf
 
     # Extension specific SHA file with extension name in path
     #     <name>/SHA256SUMS
     #       ==>  https://[...]/releases/download/<name>/SHA256SUMS
     @esha path_regexp esha ^/extensions/([^/]+)/SHA256SUMS$
     redir @esha {vars.base_dest_url}/{re.esha.1}/SHA256SUMS
+
+    # Global SHA256SUMS file with all extensions
+    #     SHA256SUMS
+    #       ==>  https://[...]/releases/download/latest/SHA256SUMS
+    @gsha path_regexp esha ^/extensions/SHA256SUMS$
+    redir @gsha {vars.base_dest_url}/latest/SHA256SUMS
 
     # None of the above matched, redirect to the website.
     redir https://travier.github.io/fedora-sysexts-exp{uri}
