@@ -44,8 +44,7 @@ runs:
           echo "Looking at releases: ${releases[@]}"
           for rel in ${releases[@]}; do
             echo "Fetching SHA256SUMS for release: ${rel}"
-            curl --location --fail --output "SHA256SUMS.${rel}" "${RELEASEURL}/${rel}/SHA256SUMS" \
-              || { echo "Failed to fetch SHA256SUMS for ${rel}"; touch "SHA256SUMS.${rel}" }
+            curl --location --fail --output "SHA256SUMS.${rel}" "${RELEASEURL}/${rel}/SHA256SUMS" || touch "SHA256SUMS.${rel}"
           done
           ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
           new="$(cat SHA256SUMS | sha256sum)"
@@ -87,8 +86,7 @@ runs:
         rm -f ./SHA256SUMS* ./*.conf
 
         for sysext in $(echo ${SYSEXTS} | tr ';' ' '); do
-            curl --location --fail --output "SHA256SUMS.${sysext}" "${RELEASEURL}/${sysext}/SHA256SUMS" \
-              || { echo "Failed to fetch SHA256SUMS for ${sysext}"; touch "SHA256SUMS.${sysext}" }
+            curl --location --fail --output "SHA256SUMS.${sysext}" "${RELEASEURL}/${sysext}/SHA256SUMS" || touch "SHA256SUMS.${sysext}"
         done
         ls ./SHA256SUMS.* | sort -h | xargs cat > SHA256SUMS
 
