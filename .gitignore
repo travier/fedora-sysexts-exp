@@ -13,5 +13,3 @@ json
 /.dnf-cache/
 /docs/vendor
 /docs/_site
-/docs/Gemfile
-/docs/Gemfile.lock
