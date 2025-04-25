@@ -71,6 +71,27 @@ build target arch=arch: \
     (download-rpms target arch) \
     (download-manual arch) \
     version \
+    (inputs target arch) \
+    (setup-rootfs target arch) \
+    install-rpms \
+    install-files \
+    install-manual \
+    move-etc \
+    rm-ignored \
+    (reset-selinux-labels target arch) \
+    (build-erofs target arch)
+
+# Split recipes for faster skip-builds in CI: Only download and generate inputs
+prepare-build target arch=arch: \
+    (check target arch) \
+    clean \
+    (download-rpms target arch) \
+    (download-manual arch) \
+    version \
+    (inputs target arch)
+
+# Split recipes for faster skip-builds in CI: Only builds, must be call after prepare-build
+resume-build target arch=arch: \
     (setup-rootfs target arch) \
     install-rpms \
     install-files \
@@ -310,6 +331,51 @@ version:
     fi
     echo "${epoch}${version}" > ./version
 
+# Generate 'inputs' files for change detection in CI
+inputs target arch=arch:
+    #!/bin/bash
+    set -euo pipefail
+    # set -x
+
+    echo "🏷️ Writing down inputs"
+
+    # Make sure that we always have a version set
+    version=""
+    if [[ -f ./version ]]; then
+        version="$(cat ./version)"
+    else
+        version=$(podman run --rm \
+            --arch={{arch}} \
+            --security-opt label=disable \
+            "{{target}}" \
+            bash -c 'source /etc/os-release ; echo -n ${OSTREE_VERSION}')
+    fi
+    # Remove special characters from the version
+    version="$(cat ./version | sed "s/\^/_/" | sed "s/:/_/")"
+    # Write back version to file
+    echo "${version}" > ./version
+
+    # Get and store name, tag and digest for the container image used to build the sysext
+    echo "{{target}}@$(podman inspect {{target}} | jq -r '.[0].Digest')" > ./digest
+
+    # Store version_id (Fedora release)
+    version_id=$(podman run --rm \
+        --arch={{arch}} \
+        --security-opt label=disable \
+        "{{target}}" \
+        bash -c 'source /etc/os-release ; echo -n ${VERSION_ID}')
+    echo "${version_id}" > ./version_id
+
+    # Store the hashes of the RPMs used to build the sysext
+    cd rpms
+    sha256sum *.rpm >> ../inputs
+    cd ..
+
+    # Store the hashes of the scripts used to build the sysext
+    sha256sum justfile >> ./scripts
+    cd ..
+    sha256sum sysext.just >> ./{{name}}/scripts
+
 # Sets up the rootfs directory and creates the extension release config
 setup-rootfs target arch=arch:
     #!/bin/bash
@@ -321,6 +387,10 @@ setup-rootfs target arch=arch:
     else
         SUDO="sudo"
     fi
+
+    version_id="$(cat ./version_id)"
+    # Post process architecture to match systemd architecture list
+    arch="$(echo {{arch}} | sed 's/_/-/g')"
 
     mkdir rootfs
     cd rootfs
@@ -353,17 +423,10 @@ setup-rootfs target arch=arch:
     fi
 
     echo "➡️ Setting up extension config file"
-    version_id=$(podman run --rm \
-        --arch={{arch}} \
-        --security-opt label=disable \
-        "{{target}}" \
-        bash -c 'source /etc/os-release ; echo -n ${VERSION_ID}')
     ${SUDO} install -d -m0755 usr/lib/extension-release.d
     {
     echo "ID=\"fedora\""
     echo "VERSION_ID=\"${version_id}\""
-    # Post process architecture to match systemd architecture list
-    arch="$(echo {{arch}} | sed 's/_/-/g')"
     echo "ARCHITECTURE=\"${arch}\""
     if [[ "${reload_manager}"  == "true" ]]; then
         echo "EXTENSION_RELOAD_MANAGER=1"
@@ -381,11 +444,6 @@ install-rpms:
     if [[ -z "{{packages}}" ]]; then
         exit 0
     fi
-
-    cd rpms
-    # Store the hashes of the RPMs used to build the sysext
-    sha256sum *.rpm >> ../inputs
-    cd ..
 
     if [[ "${UID}" == "0" ]]; then
         SUDO=""
@@ -553,25 +611,8 @@ build-erofs target arch=arch:
         SUDO="sudo"
     fi
 
-    version_id=$(podman run --rm \
-        --arch={{arch}} \
-        --security-opt label=disable \
-        "{{target}}" \
-        bash -c 'source /etc/os-release ; echo -n ${VERSION_ID}')
-
-    version=""
-    if [[ -f ./version ]]; then
-        # Remove special characters from the version
-        version="$(cat ./version | sed "s/\^/_/" | sed "s/:/_/")"
-    else
-        version=$(podman run --rm \
-            --arch={{arch}} \
-            --security-opt label=disable \
-            "{{target}}" \
-            bash -c 'source /etc/os-release ; echo -n ${OSTREE_VERSION}')
-    fi
-    echo "${version}" > ./version
-
+    version="$(cat ./version)"
+    version_id="$(cat ./version_id)"
     # Post process architecture to match systemd architecture list
     arch="$(echo {{arch}} | sed 's/_/-/g')"
 
@@ -581,17 +622,6 @@ build-erofs target arch=arch:
     if [[ "${UID}" != "0" ]]; then
         ${SUDO} chown "${USER}:" {{name}}*.raw
     fi
-
-    # Get and store name, tag and digest for the container image used to build the sysext
-    echo "{{target}}@$(podman inspect {{target}} | jq -r '.[0].Digest')" > digest
-
-    # Store version_id (Fedora release)
-    echo "${version_id}" > ./version_id
-
-    # Store the hashes of the scripts used to build the sysext
-    sha256sum justfile >> scripts
-    cd ..
-    sha256sum sysext.just >> {{name}}/scripts
 
     echo "🎉 Done!"
 

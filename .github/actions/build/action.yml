@@ -14,7 +14,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: "Build sysext"
+    - name: "Build sysext if needed"
       env:
         SYSEXT: ${{ inputs.sysext }}
         IMAGE: ${{ inputs.image }}
@@ -25,6 +25,7 @@ runs:
 
         cd "${SYSEXT}"
         if [[ "${PR}" == "true" ]]; then
+            # Only build for PRs if the content changed
             diff="$(
               git diff origin/main HEAD --stat -- . ; \
               git diff origin/main HEAD --stat -- ../sysext.just
@@ -33,9 +34,33 @@ runs:
                 echo "Skipping: No changes for this sysext in this PR"
                 exit 0
             fi
-        fi
+            echo "Detected change for this sysext. Building."
+            just build ${IMAGE}
+        else
+          # Only build for releases if the inputs changed
+          just prepare-build ${IMAGE}
 
-        just build ${IMAGE}
+          new="$(cat digest inputs scripts | sha256sum)"
+
+          VERSION_ID="$(cat ./version_id)"
+          VERSION="$(cat ./version)"
+          ARCH="$(uname -m | sed 's/_/-/g')"
+          TAGNAME="${SYSEXT}-${VERSION}-${VERSION_ID}-${ARCH}"
+
+          echo "Fetching info from existing release: ${TAGNAME}"
+          curl --location --fail --output digest.old  "${RELEASEURL}/${TAGNAME}/digest"  || touch digest.old
+          curl --location --fail --output inputs.old  "${RELEASEURL}/${TAGNAME}/inputs"  || touch inputs.old
+          curl --location --fail --output scripts.old "${RELEASEURL}/${TAGNAME}/scripts" || touch scripts.old
+          old="$(cat digest.old inputs.old scripts.old | sha256sum)"
+
+          if [[ "${new}" == "${old}" ]]; then
+            echo "No changes in inputs since last release. Skipping."
+            exit 0
+          fi
+
+          echo "Detected changes. Building new sysext for: ${TAGNAME}"
+          just resume-build ${IMAGE}
+        fi
 
     - name: "Publish sysext"
       env:
@@ -49,61 +74,52 @@ runs:
         git config --global --add safe.directory "${PWD}"
 
         cd "${SYSEXT}"
+
+        VERSION="$(cat ./version)"
+        VERSION_ID="$(cat ./version_id)"
+        ARCH="$(uname -m | sed 's/_/-/g')"
+        TAGNAME="${SYSEXT}-${VERSION}-${VERSION_ID}-${ARCH}"
+
+        if [[ ! -f "./${TAGNAME}.raw" ]]; then
+          echo "No sysext built. Skipping."
+          exit 0
+        fi
+
+        echo "Creating new release for: ${TAGNAME}"
+
         sha256sum *.raw > SHA256SUMS
 
-        VERSION_ID="$(cat ./version_id)"
-        VERSION="$(cat ./version)"
+        {
+        echo "Release:"
+        echo "\`\`\`"
+        cat ./SHA256SUMS
+        echo "\`\`\`"
+        echo ""
+        echo "Built using container image:"
+        echo "\`\`\`"
+        cat ./digest
+        echo "\`\`\`"
+        echo ""
+        echo "Built using input files:"
+        echo "\`\`\`"
+        cat ./inputs
+        echo "\`\`\`"
+        echo ""
+        echo "Built using scripts:"
+        echo "\`\`\`"
+        cat ./scripts
+        echo "\`\`\`"
+        } > notes
 
-        echo "Updating release for this sysext"
-        new="$(cat digest inputs scripts | sha256sum)"
+        gh release delete \
+          --cleanup-tag \
+          --yes \
+          "${TAGNAME}" \
+          || true
 
-        ARCH="$(uname -m | sed 's/_/-/g')"
-
-        old=""
-        TAGNAME="${SYSEXT}-${VERSION}-${VERSION_ID}-${ARCH}"
-        echo "Fetching info from existing release: ${TAGNAME}"
-        curl --location --fail --output digest.old  "${RELEASEURL}/${TAGNAME}/digest"  || touch digest.old
-        curl --location --fail --output inputs.old  "${RELEASEURL}/${TAGNAME}/inputs"  || touch inputs.old
-        curl --location --fail --output scripts.old "${RELEASEURL}/${TAGNAME}/scripts" || touch scripts.old
-        old="$(cat digest.old inputs.old scripts.old | sha256sum)"
-
-        if [[ "${new}" == "${old}" ]]; then
-          echo "No changes in inputs since last release. Skipping."
-        else
-          echo "Creating new release for: ${TAGNAME}"
-
-          {
-          echo "Release:"
-          echo "\`\`\`"
-          cat ./SHA256SUMS
-          echo "\`\`\`"
-          echo ""
-          echo "Built using container image:"
-          echo "\`\`\`"
-          cat ./digest
-          echo "\`\`\`"
-          echo ""
-          echo "Built using input files:"
-          echo "\`\`\`"
-          cat ./inputs
-          echo "\`\`\`"
-          echo ""
-          echo "Built using scripts:"
-          echo "\`\`\`"
-          cat ./scripts
-          echo "\`\`\`"
-          } > notes
-
-          gh release delete \
-            --cleanup-tag \
-            --yes \
-            "${TAGNAME}" \
-            || true
-
-          gh release create \
-            --title "${SYSEXT} ${VERSION} for Fedora ${VERSION_ID} (${ARCH})" \
-            --notes-file notes \
-            "${TAGNAME}" \
-            --latest=false \
-            ./*.raw ./SHA256SUMS ./inputs ./scripts ./digest
-        fi
+        gh release create \
+          --title "${SYSEXT} ${VERSION} for Fedora ${VERSION_ID} (${ARCH})" \
+          --notes-file notes \
+          "${TAGNAME}" \
+          --latest=false \
+          ./*.raw ./SHA256SUMS ./inputs ./scripts ./digest
