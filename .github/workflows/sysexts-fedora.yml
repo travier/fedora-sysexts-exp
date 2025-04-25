@@ -58,6 +58,12 @@ jobs:
           sysext: '1password-gui'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: bandwhich"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'bandwhich'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: bitwarden"
         uses: ./.github/actions/build
         with:
@@ -68,6 +74,12 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'btop'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: bwm-ng"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'bwm-ng'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: chromium"
@@ -88,16 +100,16 @@ jobs:
           sysext: 'cloud-hypervisor'
           image: ${{ env.IMAGE }}
 
-      - name: "Build sysext: compsize"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'compsize'
-          image: ${{ env.IMAGE }}
-
       - name: "Build sysext: distrobox"
         uses: ./.github/actions/build
         with:
           sysext: 'distrobox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: docker-ce"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'docker-ce'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: emacs"
@@ -110,6 +122,18 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'erofs-utils'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: firefox"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'firefox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: fuse2"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fuse2'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: git-absorb"
@@ -136,10 +160,22 @@ jobs:
           sysext: 'htop'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: igt-gpu-tools"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'igt-gpu-tools'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: incus"
         uses: ./.github/actions/build
         with:
           sysext: 'incus'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: iotop"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'iotop'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: iwd"
@@ -152,6 +188,12 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'just'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: keepassxc"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'keepassxc'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: krb5-workstation"
@@ -172,6 +214,12 @@ jobs:
           sysext: 'microsoft-edge'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: moby-engine"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'moby-engine'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: mullvad-vpn"
         uses: ./.github/actions/build
         with:
@@ -182,6 +230,18 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'neovim'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: openh264"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'openh264'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: openssl"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'openssl'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: ripgrep"
@@ -300,6 +360,12 @@ jobs:
           sysext: '1password-gui'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: bandwhich"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'bandwhich'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: bitwarden"
         uses: ./.github/actions/build
         with:
@@ -310,6 +376,12 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'btop'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: bwm-ng"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'bwm-ng'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: chromium"
@@ -330,16 +402,16 @@ jobs:
           sysext: 'cloud-hypervisor'
           image: ${{ env.IMAGE }}
 
-      - name: "Build sysext: compsize"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'compsize'
-          image: ${{ env.IMAGE }}
-
       - name: "Build sysext: distrobox"
         uses: ./.github/actions/build
         with:
           sysext: 'distrobox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: docker-ce"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'docker-ce'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: emacs"
@@ -352,6 +424,18 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'erofs-utils'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: firefox"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'firefox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: fuse2"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fuse2'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: git-absorb"
@@ -378,10 +462,22 @@ jobs:
           sysext: 'htop'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: igt-gpu-tools"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'igt-gpu-tools'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: incus"
         uses: ./.github/actions/build
         with:
           sysext: 'incus'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: iotop"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'iotop'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: iwd"
@@ -394,6 +490,12 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'just'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: keepassxc"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'keepassxc'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: krb5-workstation"
@@ -414,6 +516,12 @@ jobs:
           sysext: 'microsoft-edge'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: moby-engine"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'moby-engine'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: mullvad-vpn"
         uses: ./.github/actions/build
         with:
@@ -424,6 +532,18 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'neovim'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: openh264"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'openh264'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: openssl"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'openssl'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: ripgrep"
@@ -714,10 +834,22 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
 
+      - name: "Build sysext: bandwhich"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'bandwhich'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: btop"
         uses: ./.github/actions/build
         with:
           sysext: 'btop'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: bwm-ng"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'bwm-ng'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: chromium"
@@ -738,16 +870,16 @@ jobs:
           sysext: 'cloud-hypervisor'
           image: ${{ env.IMAGE }}
 
-      - name: "Build sysext: compsize"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'compsize'
-          image: ${{ env.IMAGE }}
-
       - name: "Build sysext: distrobox"
         uses: ./.github/actions/build
         with:
           sysext: 'distrobox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: docker-ce"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'docker-ce'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: emacs"
@@ -760,6 +892,18 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'erofs-utils'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: firefox"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'firefox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: fuse2"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fuse2'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: git-absorb"
@@ -780,10 +924,22 @@ jobs:
           sysext: 'htop'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: igt-gpu-tools"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'igt-gpu-tools'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: incus"
         uses: ./.github/actions/build
         with:
           sysext: 'incus'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: iotop"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'iotop'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: iwd"
@@ -798,6 +954,12 @@ jobs:
           sysext: 'just'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: keepassxc"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'keepassxc'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: krb5-workstation"
         uses: ./.github/actions/build
         with:
@@ -810,6 +972,12 @@ jobs:
           sysext: 'libvirtd-desktop'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: moby-engine"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'moby-engine'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: mullvad-vpn"
         uses: ./.github/actions/build
         with:
@@ -820,6 +988,18 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'neovim'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: openh264"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'openh264'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: openssl"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'openssl'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: ripgrep"
@@ -926,10 +1106,22 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
 
+      - name: "Build sysext: bandwhich"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'bandwhich'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: btop"
         uses: ./.github/actions/build
         with:
           sysext: 'btop'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: bwm-ng"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'bwm-ng'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: chromium"
@@ -944,22 +1136,16 @@ jobs:
           sysext: 'cilium-cli'
           image: ${{ env.IMAGE }}
 
-      - name: "Build sysext: cloud-hypervisor"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'cloud-hypervisor'
-          image: ${{ env.IMAGE }}
-
-      - name: "Build sysext: compsize"
-        uses: ./.github/actions/build
-        with:
-          sysext: 'compsize'
-          image: ${{ env.IMAGE }}
-
       - name: "Build sysext: distrobox"
         uses: ./.github/actions/build
         with:
           sysext: 'distrobox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: docker-ce"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'docker-ce'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: emacs"
@@ -972,6 +1158,18 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'erofs-utils'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: firefox"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'firefox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: fuse2"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fuse2'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: git-absorb"
@@ -992,10 +1190,22 @@ jobs:
           sysext: 'htop'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: igt-gpu-tools"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'igt-gpu-tools'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: incus"
         uses: ./.github/actions/build
         with:
           sysext: 'incus'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: iotop"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'iotop'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: iwd"
@@ -1010,6 +1220,12 @@ jobs:
           sysext: 'just'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: keepassxc"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'keepassxc'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: krb5-workstation"
         uses: ./.github/actions/build
         with:
@@ -1022,6 +1238,12 @@ jobs:
           sysext: 'libvirtd-desktop'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: moby-engine"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'moby-engine'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: mullvad-vpn"
         uses: ./.github/actions/build
         with:
@@ -1032,6 +1254,18 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'neovim'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: openh264"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'openh264'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: openssl"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'openssl'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: ripgrep"
@@ -1320,4 +1554,4 @@ jobs:
       - name: "Gather all sysexts releases"
         uses: ./.github/actions/gather
         with:
-          sysexts: '1password-cli;1password-gui;bitwarden;btop;chromium;cilium-cli;cloud-hypervisor;compsize;distrobox;emacs;erofs-utils;gdb;git-absorb;git-delta;google-chrome;htop;incus;iwd;just;krb5-workstation;kubernetes-1.29;kubernetes-1.30;kubernetes-1.31;kubernetes-1.32;kubernetes-cri-o-1.29;kubernetes-cri-o-1.30;kubernetes-cri-o-1.31;kubernetes-cri-o-1.32;libvirtd;libvirtd-desktop;microsoft-edge;mullvad-vpn;neovim;python3;ripgrep;semanage;source-foundry-hack-fonts;steam-devices;strace;tree;vim;virtctl;vscode;vscodium;wasmtime;wireguard-tools;youki;zoxide;zsh;'
+          sysexts: '1password-cli;1password-gui;bandwhich;bitwarden;btop;bwm-ng;chromium;cilium-cli;cloud-hypervisor;distrobox;docker-ce;emacs;erofs-utils;firefox;fuse2;gdb;git-absorb;git-delta;google-chrome;htop;igt-gpu-tools;incus;iotop;iwd;just;keepassxc;krb5-workstation;kubernetes-1.29;kubernetes-1.30;kubernetes-1.31;kubernetes-1.32;kubernetes-cri-o-1.29;kubernetes-cri-o-1.30;kubernetes-cri-o-1.31;kubernetes-cri-o-1.32;libvirtd;libvirtd-desktop;microsoft-edge;moby-engine;mullvad-vpn;neovim;openh264;openssl;python3;ripgrep;semanage;source-foundry-hack-fonts;steam-devices;strace;tree;vim;virtctl;vscode;vscodium;wasmtime;wireguard-tools;youki;zoxide;zsh;'
