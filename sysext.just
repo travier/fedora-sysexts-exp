@@ -367,9 +367,13 @@ inputs target arch=arch:
     echo "${version_id}" > ./version_id
 
     # Store the hashes of the RPMs used to build the sysext
-    cd rpms
-    sha256sum *.rpm >> ../inputs
-    cd ..
+    if [[ -d ./rpms ]]; then
+        cd rpms
+        sha256sum *.rpm >> ../inputs
+        cd ..
+    fi
+    # Make sure that we have an inputs file in all cases
+    touch ./inputs
 
     # Store the hashes of the scripts used to build the sysext
     sha256sum justfile >> ./scripts
