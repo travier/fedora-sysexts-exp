@@ -58,6 +58,12 @@ repo.
 See [CONTRIBUTING](CONTRIBUTING.md) for details about the CI setup specific to
 this repo.
 
+## Credits
+
+This project is heavily inspired by the work done by
+[Thilo](https://github.com/t-lo) on the
+[Flatcar sysext bakery](https://flatcar.github.io/sysext-bakery/).
+
 ## License
 
 [MIT](LICENSE).
