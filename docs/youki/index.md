@@ -1,6 +1,6 @@
 ---
 title: youki
-nav_order: 59
+nav_order: 55
 ---
 
 # youki

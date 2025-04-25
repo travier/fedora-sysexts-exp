@@ -16,7 +16,8 @@ local system via SSH to a rootful container that has tcpdump installed.
 
 See: https://discussion.fedoraproject.org/t/silverblue-wireshark-does-not-see-network-interfaces/88916/11
 
-This requires some manual setup so using this sysext should be easier.
+This requires some manual setup thus in some cases, using this sysext should be
+easier.
 
 ## Why not use layering?
 

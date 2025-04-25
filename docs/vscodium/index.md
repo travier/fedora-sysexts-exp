@@ -1,6 +1,6 @@
 ---
 title: vscodium
-nav_order: 55
+nav_order: 52
 ---
 
 # vscodium

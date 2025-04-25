@@ -1,11 +1,11 @@
 ---
 title: python3
-nav_order: 44
+nav_order: 43
 ---
 
 # python3
 
-Only core Python 3 packages.
+Only core Python 3 packages. For Fedora CoreOS only.
 
 ## Versions available
 

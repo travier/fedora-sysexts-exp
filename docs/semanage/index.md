@@ -1,11 +1,11 @@
 ---
 title: semanage
-nav_order: 46
+nav_order: 45
 ---
 
 # semanage
 
-SELinux utilities, including those that require Python.
+SELinux utilities, including those that require Python. For Fedora CoreOS only.
 
 ## Versions available
 

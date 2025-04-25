@@ -296,7 +296,7 @@ version:
     echo "🏷️ Writing down version"
 
     if [[ -n "{{version_package}}" ]]; then
-        if [[ $(ls rpms/{{version_package}}*.rpm | wc -l) -ne 1 ]]; then
+        if [[ $(ls rpms/*.rpm | grep -cE "^rpms/{{version_package}}-[0-9]" ) -ne 1 ]]; then
             echo "More than one package matched: {{version_package}}."
             exit 1
         fi
@@ -312,12 +312,12 @@ version:
     packages=($(echo "{{packages}}" | xargs))
 
     if [[ ${#packages[@]} -ne 1 ]]; then
-        if [[ $(ls rpms/*.rpm | grep -c "{{name}}") -eq 1 ]]; then
-            rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/{{name}}*.rpm > ./version
-            exit 0
+        if [[ $(ls rpms/*.rpm | grep -cE "^rpms/{{name}}-[0-9]") -ne 1 ]]; then
+            echo "More that one package listed. Set 'version_package' or define the 'version' recipe in your justfile for this sysext."
+            exit 1
         fi
-        echo "More that one package listed. Set 'version_package' or define the 'version' recipe in your justfile for this sysext."
-        exit 1
+        rpm -qp --queryformat '%{VERSION}-%{RELEASE}' rpms/{{name}}*.rpm > ./version
+        exit 0
     fi
 
     # Only one package listed, let's use its version

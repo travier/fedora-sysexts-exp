@@ -1,6 +1,6 @@
 ---
 title: vim
-nav_order: 52
+nav_order: 49
 ---
 
 # vim

@@ -38,6 +38,9 @@ main() {
     navorder=1
 
     for s in $(git ls-tree -d --name-only HEAD | grep -Ev ".github|.workflow-templates|docs"); do
+        if [[ -f ./${s}/.docs-ignore ]]; then
+            continue
+        fi
         navorder=$((navorder+1))
         mkdir -p "docs/${s}"
         {
