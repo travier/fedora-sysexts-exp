@@ -1,4 +1,4 @@
-title: "Fedora sysexts"
+title: "extensions.fcos.fr"
 description: "Experimental systemd system extensions (sysexts) for Fedora image based systems"
 baseurl: "/fedora-sysexts-exp"
 url: "https://travier.github.io"
