@@ -2,18 +2,21 @@
 
 See the [%%SYSEXT%% versions](%%RELEASEURL%%/%%SYSEXT%%).
 
-## First time setup
+## Usage instructions
 
+<details markdown="block">
+<summary>First time setup</summary>
 Run those commands if you have not yet installed any sysext on your system:
 
 ```
 sudo install -d -m 0755 -o 0 -g 0 /var/lib/extensions /var/lib/extensions.d
 sudo restorecon -RFv /var/lib/extensions /var/lib/extensions.d
 ```
+</details>
 
-## Installing the sysext
-
-Define a helper function and then install the sysext:
+<details markdown="block">
+<summary>Installation</summary>
+Define a helper function:
 
 ```
 install_sysext() {
@@ -25,21 +28,40 @@ install_sysext() {
     | sudo tee "/etc/sysupdate.${SYSEXT}.d/${SYSEXT}.conf"
   sudo /usr/lib/systemd/systemd-sysupdate update --component "${SYSEXT}"
 }
-
-install_sysext %%SYSEXT%%
 ```
 
-## Activating the sysext
+Install the sysext:
+
+```
+install_sysext %%SYSEXT%%
+```
+</details>
+
+<details markdown="block">
+<summary>Merging</summary>
+Note that this will merge all installed sysexts unconditionally:
 
 ```
 sudo systemctl restart systemd-sysext.service
 systemd-sysext status
 ```
+</details>
 
-## Updating the sysext
+<details markdown="block">
+<summary>Updates</summary>
+Update this sysext using:
 
 ```
 sudo /usr/lib/systemd/systemd-sysupdate update --component %%SYSEXT%%
+```
+
+If you want to use the new version immediately, make sure to refresh the merged
+sysexts:
+
+```
 sudo systemctl restart systemd-sysext.service
 systemd-sysext status
 ```
+
+See the main page for an example to update all sysexts.
+</details>
