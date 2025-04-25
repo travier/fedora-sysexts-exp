@@ -1,6 +1,6 @@
 ---
 title: kubernetes-1.29
-nav_order: 26
+nav_order: 27
 ---
 
 # kubernetes-1.29

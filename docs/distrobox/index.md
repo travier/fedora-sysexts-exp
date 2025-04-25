@@ -1,6 +1,6 @@
 ---
 title: distrobox
-nav_order: 10
+nav_order: 11
 ---
 
 # distrobox

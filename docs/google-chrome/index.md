@@ -1,6 +1,6 @@
 ---
 title: google-chrome
-nav_order: 19
+nav_order: 20
 ---
 
 # google-chrome

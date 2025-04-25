@@ -1,6 +1,6 @@
 ---
 title: strace
-nav_order: 47
+nav_order: 48
 ---
 
 # strace

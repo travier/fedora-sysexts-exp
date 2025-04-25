@@ -1,6 +1,6 @@
 ---
 title: git-delta
-nav_order: 18
+nav_order: 19
 ---
 
 # git-delta

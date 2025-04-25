@@ -1,15 +1,15 @@
 ---
-title: vscodium
-nav_order: 53
+title: bandwhich
+nav_order: 4
 ---
 
-# vscodium
+# bandwhich
 
-VSCodium from the official RPM releases.
+Upstream binary releases: <https://github.com/imsnif/bandwhich>
 
 ## Versions available
 
-See the [vscodium versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/vscodium).
+See the [bandwhich versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/bandwhich).
 
 ## Usage instructions
 
@@ -42,7 +42,7 @@ install_sysext() {
 Install the sysext:
 
 ```
-install_sysext vscodium
+install_sysext bandwhich
 ```
 </details>
 
@@ -61,7 +61,7 @@ systemd-sysext status
 Update this sysext using:
 
 ```
-sudo /usr/lib/systemd/systemd-sysupdate update --component vscodium
+sudo /usr/lib/systemd/systemd-sysupdate update --component bandwhich
 ```
 
 If you want to use the new version immediately, make sure to refresh the merged
