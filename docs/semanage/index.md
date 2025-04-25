@@ -1,6 +1,6 @@
 ---
 title: semanage
-nav_order: 46
+nav_order: 47
 ---
 
 # semanage

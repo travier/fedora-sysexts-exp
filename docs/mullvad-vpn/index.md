@@ -1,6 +1,6 @@
 ---
 title: mullvad-vpn
-nav_order: 40
+nav_order: 41
 ---
 
 # mullvad-vpn

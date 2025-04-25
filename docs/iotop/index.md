@@ -1,17 +1,13 @@
 ---
-title: openh264
-nav_order: 43
+title: iotop
+nav_order: 24
 ---
 
-# openh264
-
-OpenH264 library and support for Firefox, from Cisco's OpenH264 repo.
-
-Work in progress.
+# iotop
 
 ## Versions available
 
-See the [openh264 versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/openh264).
+See the [iotop versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/iotop).
 
 ## Usage instructions
 
@@ -44,7 +40,7 @@ install_sysext() {
 Install the sysext:
 
 ```
-install_sysext openh264
+install_sysext iotop
 ```
 </details>
 
@@ -63,7 +59,7 @@ systemd-sysext status
 Update this sysext using:
 
 ```
-sudo /usr/lib/systemd/systemd-sysupdate update --component openh264
+sudo /usr/lib/systemd/systemd-sysupdate update --component iotop
 ```
 
 If you want to use the new version immediately, make sure to refresh the merged

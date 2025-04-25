@@ -1,6 +1,6 @@
 ---
 title: microsoft-edge
-nav_order: 37
+nav_order: 39
 ---
 
 # microsoft-edge

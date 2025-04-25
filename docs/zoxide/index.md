@@ -1,6 +1,6 @@
 ---
 title: zoxide
-nav_order: 57
+nav_order: 58
 ---
 
 # zoxide
