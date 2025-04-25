@@ -6,13 +6,14 @@ containerd.io
 docker-buildx-plugin
 docker-compose-plugin
 "
+version_package := "docker-ce-cli"
 upholds := "
 docker.socket
 "
 external_repos := "https://download.docker.com/linux/fedora/docker-ce.repo"
 base_images := "
-quay.io/fedora-ostree-desktops/silverblue:41
-quay.io/fedora-ostree-desktops/kinoite:41
+quay.io/fedora-ostree-desktops/base-atomic:41 x86_64,aarch64
+quay.io/fedora-ostree-desktops/base-atomic:42 x86_64,aarch64
 "
 
 import '../sysext.just'

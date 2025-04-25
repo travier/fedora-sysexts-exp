@@ -39,6 +39,18 @@ and `aarch64`, if the software is avaible for it. Some images only target
 Fedora CoreOS and are thus only built for the current releases used by Fedora
 CoreOS.
 
+## Integration with bootc / Bootable Containers
+
+The planned user experience for using those sysexts is that they are built as
+container layers, pushed to a registry as distinct tags, downloaded, managed
+and updated in sync with the OS by bootc. See:
+[bootc#7](https://github.com/containers/bootc/issues/7) and
+[README.containers.md](https://github.com/travier/fedora-sysexts/blob/main/README.containers.md).
+
+This integration is currently still a work in progress. The first step will
+likely be a standalone sysext manager / updater application, which will then be
+integrated into bootc.
+
 ## Installing and updating using `systemd-sysupdate`
 
 You can currently install and update those sysexts using `systemd-sysupdate`.
@@ -80,18 +92,6 @@ See
 [travier/fedora-coreos-kubernetes](https://github.com/travier/fedora-coreos-kubernetes)
 for a more complete example deploying Kubernetes on Fedora CoreOS using
 sysexts.
-
-## Integration with bootc / Bootable Containers
-
-The planned user experience for using those sysexts is that they are built as
-container layers, pushed to a registry as distinct tags, downloaded, managed
-and updated in sync with the OS by bootc. See:
-[bootc#7](https://github.com/containers/bootc/issues/7) and
-[README.containers.md](https://github.com/travier/fedora-sysexts/blob/main/README.containers.md).
-
-This integration is currently still a work in progress. The first step will
-likely be a standalone sysext manager / updater application, which will then be
-integrated into bootc.
 
 ## Know issues
 
