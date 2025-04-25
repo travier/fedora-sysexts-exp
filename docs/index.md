@@ -31,6 +31,20 @@ For a more general description of sysexts, see the
 [Extension Images](https://uapi-group.org/specifications/specs/extension_image/)
 specification from the UAPI group.
 
+## Can sysexts replace package layering or container builds?
+
+Sysexts can only modify the content in `/usr` and they are enabled relatively
+"late" during the boot process, thus they come with some limitations. They can
+not be used to:
+- install another kernel
+- install kernel modules
+- make changes to the initrd
+- make changes to `/etc`
+- add udev rules
+
+If you need to do one of those, you should use package layering or do a
+container build. Otherwise, sysexts might be a good fit.
+
 ## Available sysexts
 
 You can find all the available sysexts in the list on the side of this page.
