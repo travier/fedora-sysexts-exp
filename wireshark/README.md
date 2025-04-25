@@ -1,5 +1,8 @@
 # wireshark
 
+Note: Temporarily not built until we can make per-variant (Silverblue, Kinoite,
+CoreOS) builds or we directly duplicate this sysext for each variant.
+
 ## How to use
 
 - Install the system extension
