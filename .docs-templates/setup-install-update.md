@@ -63,5 +63,11 @@ sudo systemctl restart systemd-sysext.service
 systemd-sysext status
 ```
 
-See the main page for an example to update all sysexts.
+To update all sysexts on a system:
+
+```
+for c in $(/usr/lib/systemd/systemd-sysupdate components --json=short | jq --raw-output '.components[]'); do
+    sudo /usr/lib/systemd/systemd-sysupdate update --component "${c}"
+done
+```
 </details>
