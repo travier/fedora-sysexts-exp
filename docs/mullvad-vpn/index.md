@@ -13,18 +13,21 @@ See: <https://mullvad.net/en/help/install-mullvad-app-linux>
 
 See the [mullvad-vpn versions](https://github.com/travier/fedora-sysexts-exp/releases/tag/mullvad-vpn).
 
-## First time setup
+## Usage instructions
 
+<details markdown="block">
+<summary>First time setup</summary>
 Run those commands if you have not yet installed any sysext on your system:
 
 ```
 sudo install -d -m 0755 -o 0 -g 0 /var/lib/extensions /var/lib/extensions.d
 sudo restorecon -RFv /var/lib/extensions /var/lib/extensions.d
 ```
+</details>
 
-## Installing the sysext
-
-Define a helper function and then install the sysext:
+<details markdown="block">
+<summary>Installation</summary>
+Define a helper function:
 
 ```
 install_sysext() {
@@ -36,21 +39,46 @@ install_sysext() {
     | sudo tee "/etc/sysupdate.${SYSEXT}.d/${SYSEXT}.conf"
   sudo /usr/lib/systemd/systemd-sysupdate update --component "${SYSEXT}"
 }
-
-install_sysext mullvad-vpn
 ```
 
-## Activating the sysext
+Install the sysext:
+
+```
+install_sysext mullvad-vpn
+```
+</details>
+
+<details markdown="block">
+<summary>Merging</summary>
+Note that this will merge all installed sysexts unconditionally:
 
 ```
 sudo systemctl restart systemd-sysext.service
 systemd-sysext status
 ```
+</details>
 
-## Updating the sysext
+<details markdown="block">
+<summary>Updates</summary>
+Update this sysext using:
 
 ```
 sudo /usr/lib/systemd/systemd-sysupdate update --component mullvad-vpn
+```
+
+If you want to use the new version immediately, make sure to refresh the merged
+sysexts:
+
+```
 sudo systemctl restart systemd-sysext.service
 systemd-sysext status
 ```
+
+To update all sysexts on a system:
+
+```
+for c in $(/usr/lib/systemd/systemd-sysupdate components --json=short | jq --raw-output '.components[]'); do
+    sudo /usr/lib/systemd/systemd-sysupdate update --component "${c}"
+done
+```
+</details>
