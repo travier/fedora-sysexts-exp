@@ -61,6 +61,18 @@ main() {
            "${tmpl}/setup-install-update.md"
         } > "docs/${s}/index.md"
     done
+
+    pushd docs > /dev/null
+    docs_dir="$(ls -d ./*/ | grep -vE "_site|vendor")"
+    popd > /dev/null
+    sysexts_dirs="$(ls -d ./*/ | grep -vE "docs|mpd|steam|steam-devices|wireshark")"
+
+    diff="$(diff -u <(echo "${docs_dir}") <(echo "${sysexts_dirs}") || true)"
+    if [[ -n "${diff}" ]]; then
+        echo "Diff between current sysexts and docs is not empty. Cleanup needed following a sysext removal?"
+        echo ""
+        echo "${diff}"
+    fi
 }
 
 main "${@}"
