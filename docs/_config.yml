@@ -3,11 +3,11 @@ description: "Experimental systemd system extensions (sysexts) for Fedora image 
 baseurl: "/fedora-sysexts-exp"
 url: "https://travier.github.io"
 permalink: "/:title/"
-# markdown: "kramdown"
-# kramdown:
-#   typographic_symbols:
-#     ndash: "--"
-#     mdash: "---"
+markdown: "kramdown"
+kramdown:
+  typographic_symbols:
+    ndash: "--"
+    mdash: "---"
 
 remote_theme: just-the-docs/just-the-docs@v0.8.1
 plugins:
