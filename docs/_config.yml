@@ -1,5 +1,6 @@
 title: "extensions.fcos.fr"
 description: "Experimental systemd system extensions (sysexts) for Fedora image based systems"
+# baseurl: "/fedora-sysexts"
 baseurl: "/fedora-sysexts-exp"
 url: "https://travier.github.io"
 permalink: "/:title/"
@@ -23,6 +24,7 @@ exclude:
 # Aux links for the upper right navigation
 aux_links:
   "Sources on GitHub":
+    # - "https://github.com/travier/fedora-sysexts"
     - "https://github.com/travier/fedora-sysexts-exp"
 
 # Footer last edited timestamp
@@ -32,6 +34,7 @@ last_edit_time_format: "%b %e %Y at %I:%M %p"
 # Footer "Edit this page on GitHub" link text
 gh_edit_link: true
 gh_edit_link_text: "Edit this page on GitHub"
+# gh_edit_repository: "https://github.com/travier/fedora-sysexts"
 gh_edit_repository: "https://github.com/travier/fedora-sysexts-exp"
 gh_edit_branch: "main"
 gh_edit_source: "docs"

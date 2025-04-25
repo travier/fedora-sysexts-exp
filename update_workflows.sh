@@ -18,7 +18,7 @@ main() {
     rm -f "./.github/workflows/containers"*".yml"
     rm -f "./.github/workflows/sysexts"*".yml"
 
-    local -r releaseurl="https://github.com/travier/fedora-sysexts-exp/releases/download"
+    local -r releaseurl="https://github.com/\${{ github.repository }}/releases/download"
 
     arches=(
         'x86_64'

@@ -15,6 +15,7 @@ main() {
     # TODO: Remove existing directories in docs
 
     local -r extensionsurl="https://extensions.fcos.fr/extensions"
+    # local -r releaseurl="https://github.com/travier/fedora-sysexts/releases/tag"
     local -r releaseurl="https://github.com/travier/fedora-sysexts-exp/releases/tag"
 
     # arches=(
