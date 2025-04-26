@@ -16,7 +16,6 @@ main() {
 
     # Remove all existing worflows
     rm -f "./.github/workflows/containers"*".yml"
-    rm "./.github/workflows/sysexts"*".yml"
 
     generate \
         'quay.io/fedora/fedora-coreos' \
@@ -101,31 +100,6 @@ generate() {
         exit 1
     fi
 
-    # Generate EROFS sysexts workflows
-    {
-    sed \
-        -e "s|%%IMAGE%%|${image}:${release}|g" \
-        -e "s|%%RELEASE%%|${release}|g" \
-        -e "s|%%NAME%%|${name}|g" \
-        -e "s|%%SHORTNAME%%|${shortname}|g" \
-        -e "s|%%ARCH%%|${arch}|g" \
-        "${tmpl}/sysexts_header"
-    echo ""
-    for s in "${sysexts[@]}"; do
-        sed "s|%%SYSEXT%%|${s}|g" "${tmpl}/sysexts_body"
-        echo ""
-    done
-    cat "${tmpl}/sysexts_footer"
-    } > ".github/workflows/sysexts-${shortname}-${release}-${arch}.yml"
-
-    # Fix GitHub runner for aarch64
-    if [[ "${arch}" == "aarch64" ]]; then
-        sed -i "s/ubuntu-24.04/ubuntu-24.04-arm/" ".github/workflows/sysexts-${shortname}-${release}-${arch}.yml"
-    fi
-
-    # Skip container builds for now as we are not using them yet.
-    return 0
-
     # Generate container sysexts workflows
     # Skip non x86-64 builds for now
     if [[ "${arch}" != "x86_64" ]]; then
@@ -150,18 +124,21 @@ generate() {
             echo ""
         fi
     done
+
     # Skip pushing containers for now
-    # cat "${tmpl}/containers_logincosign"
-    # echo ""
-    # for s in "${sysexts[@]}"; do
-    #     if [[ -f "${s}/Containerfile" ]]; then
-    #         sed \
-    #             -e "s|%%SYSEXT%%|${s}|g" \
-    #             -e "s|%%SYSEXT_NODOT%%|${s//\./_}|g" \
-    #             "${tmpl}/containers_pushsign"
-    #         echo ""
-    #     fi
-    # done
+    return 0
+
+    cat "${tmpl}/containers_logincosign"
+    echo ""
+    for s in "${sysexts[@]}"; do
+        if [[ -f "${s}/Containerfile" ]]; then
+            sed \
+                -e "s|%%SYSEXT%%|${s}|g" \
+                -e "s|%%SYSEXT_NODOT%%|${s//\./_}|g" \
+                "${tmpl}/containers_pushsign"
+            echo ""
+        fi
+    done
     } > ".github/workflows/containers-${shortname}-${release}.yml"
 }
 
