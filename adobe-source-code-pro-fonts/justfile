@@ -1,0 +1,15 @@
+name := "adobe-source-code-pro-fonts"
+packages := "
+adobe-source-code-pro-fonts
+adobe-source-code-vf-fonts
+"
+base_images := "
+quay.io/fedora-ostree-desktops/silverblue:41
+quay.io/fedora-ostree-desktops/silverblue:42
+quay.io/fedora-ostree-desktops/kinoite:41
+quay.io/fedora-ostree-desktops/kinoite:42
+"
+
+import '../sysext.just'
+
+all: default
