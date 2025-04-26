@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Re-generate the docs. Might be later converted to a GitHub workflow
-# publishing to GitHub Pages directly.
+# Re-generate the docs for the GitHub Pages workflow.
+# TODO: Note somewhere for which images the sysext is for?
 
 set -euo pipefail
 # set -x
@@ -12,21 +12,8 @@ main() {
         exit 1
     fi
 
-    # TODO: Remove existing directories in docs
-
     local -r extensionsurl="https://extensions.fcos.fr/extensions"
     local -r releaseurl="https://github.com/travier/fedora-sysexts-exp/releases/tag"
-
-    # arches=(
-    #     'x86_64'
-    #     'aarch64'
-    # )
-    # images=(
-    #     'quay.io/fedora-ostree-desktops/base-atomic:41'
-    #     'quay.io/fedora-ostree-desktops/base-atomic:42'
-    #     'quay.io/fedora/fedora-coreos:stable'
-    #     'quay.io/fedora/fedora-coreos:next'
-    # )
 
     local -r tmpl=".docs-templates/"
 
@@ -51,8 +38,6 @@ main() {
         if [[ -f "README.md" ]]; then
             tail -n +2 README.md
         fi
-        # TODO
-        # just targets
         popd > /dev/null
         echo ""
         sed -e "s|%%SYSEXT%%|${s}|g" \
