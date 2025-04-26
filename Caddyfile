@@ -67,7 +67,7 @@ http://:8080 {
     redir @gsha {vars.base_dest_url}/latest/SHA256SUMS
 
     # None of the above matched, redirect to the website.
-    redir https://travier.github.io/fedora-sysexts-exp{uri}
+    redir https://travier.github.io/fedora-sysexts{uri}
 
     ###########################################################################
 
@@ -87,5 +87,5 @@ http://:8080 {
     redir @eshaexp {vars.base_dest_url_exp}/{re.eshaexp.1}/SHA256SUMS
 
     @gshaexp path_regexp gshaexp ^/extensions-exp/SHA256SUMS$
-    redir @gshaexp {vars.base_dest_url}/latest/SHA256SUMS
+    redir @gshaexp {vars.base_dest_url_exp}/latest/SHA256SUMS
 }
