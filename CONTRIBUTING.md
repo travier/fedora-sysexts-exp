@@ -1,10 +1,5 @@
 # Contributing to this repo
 
-## Updating the docs/website
-
-Run `./update_docs.sh` after changes to the sysext's `README.md` or adding /
-removing a sysext to regenerate the docs.
-
 ## Adding a new sysext
 
 - Create a new folder
