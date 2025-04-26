@@ -5,20 +5,20 @@ env:
   REGISTRY: "ghcr.io/${{ github.repository_owner }}"
 
 on:
-  pull_request:
-    branches:
-      - "main"
-    paths:
-      - '.github/Containerfile.buildroot'
-      - '.github/workflows/buildroot.yml'
-  push:
-    branches:
-      - "main"
-    paths:
-      - '.github/Containerfile.buildroot'
-      - '.github/workflows/buildroot.yml'
-  schedule:
-    - cron:  '0 0 * * MON'
+  # pull_request:
+  #   branches:
+  #     - "main"
+  #   paths:
+  #     - '.github/Containerfile.buildroot'
+  #     - '.github/workflows/buildroot.yml'
+  # push:
+  #   branches:
+  #     - "main"
+  #   paths:
+  #     - '.github/Containerfile.buildroot'
+  #     - '.github/workflows/buildroot.yml'
+  # schedule:
+  #   - cron:  '0 0 * * MON'
   workflow_dispatch:
 
 # Allow:

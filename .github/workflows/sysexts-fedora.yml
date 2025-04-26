@@ -5,14 +5,14 @@ env:
   RELEASEURL: "https://github.com/${{ github.repository }}/releases/download"
 
 on:
-  pull_request:
-    branches:
-      - "main"
-  push:
-    branches:
-      - "main"
-  schedule:
-    - cron:  '0 0 * * *'
+  # pull_request:
+  #   branches:
+  #     - "main"
+  # push:
+  #   branches:
+  #     - "main"
+  # schedule:
+  #   - cron:  '0 0 * * *'
   workflow_dispatch:
 
 # Needed to allow creating a release
