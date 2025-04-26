@@ -1,7 +1,7 @@
 name: "Build buildroot container image for CI"
 
 env:
-  NAME: "fedora-sysexts-exp/buildroot"
+  NAME: "${{ github.repository }}"
   REGISTRY: "ghcr.io/${{ github.repository_owner }}"
 
 on:
@@ -94,6 +94,7 @@ jobs:
       - build-aarch64
     steps:
       - name: Create multi-arch manifest
+        if: (github.event_name == 'push' || github.event_name == 'schedule') && github.ref == 'refs/heads/main'
         shell: bash
         run: |
           set -euxo pipefail

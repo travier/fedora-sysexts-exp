@@ -124,10 +124,22 @@ jobs:
           sysext: 'erofs-utils'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: fd-find"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fd-find'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: firefox"
         uses: ./.github/actions/build
         with:
           sysext: 'firefox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: fish"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fish'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: fuse2"
@@ -152,6 +164,12 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'google-chrome'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: helix"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'helix'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: htop"
@@ -426,10 +444,22 @@ jobs:
           sysext: 'erofs-utils'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: fd-find"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fd-find'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: firefox"
         uses: ./.github/actions/build
         with:
           sysext: 'firefox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: fish"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fish'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: fuse2"
@@ -454,6 +484,12 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'google-chrome'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: helix"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'helix'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: htop"
@@ -894,10 +930,22 @@ jobs:
           sysext: 'erofs-utils'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: fd-find"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fd-find'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: firefox"
         uses: ./.github/actions/build
         with:
           sysext: 'firefox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: fish"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fish'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: fuse2"
@@ -916,6 +964,12 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'git-delta'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: helix"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'helix'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: htop"
@@ -1160,10 +1214,22 @@ jobs:
           sysext: 'erofs-utils'
           image: ${{ env.IMAGE }}
 
+      - name: "Build sysext: fd-find"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fd-find'
+          image: ${{ env.IMAGE }}
+
       - name: "Build sysext: firefox"
         uses: ./.github/actions/build
         with:
           sysext: 'firefox'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: fish"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'fish'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: fuse2"
@@ -1182,6 +1248,12 @@ jobs:
         uses: ./.github/actions/build
         with:
           sysext: 'git-delta'
+          image: ${{ env.IMAGE }}
+
+      - name: "Build sysext: helix"
+        uses: ./.github/actions/build
+        with:
+          sysext: 'helix'
           image: ${{ env.IMAGE }}
 
       - name: "Build sysext: htop"
@@ -1554,4 +1626,4 @@ jobs:
       - name: "Gather all sysexts releases"
         uses: ./.github/actions/gather
         with:
-          sysexts: '1password-cli;1password-gui;bandwhich;bitwarden;btop;bwm-ng;chromium;cilium-cli;cloud-hypervisor;distrobox;docker-ce;emacs;erofs-utils;firefox;fuse2;gdb;git-absorb;git-delta;google-chrome;htop;igt-gpu-tools;incus;iotop;iwd;just;keepassxc;krb5-workstation;kubernetes-1.29;kubernetes-1.30;kubernetes-1.31;kubernetes-1.32;kubernetes-cri-o-1.29;kubernetes-cri-o-1.30;kubernetes-cri-o-1.31;kubernetes-cri-o-1.32;libvirtd;libvirtd-desktop;microsoft-edge;moby-engine;mullvad-vpn;neovim;openh264;openssl;python3;ripgrep;semanage;source-foundry-hack-fonts;steam-devices;strace;tree;vim;virtctl;vscode;vscodium;wasmtime;wireguard-tools;youki;zoxide;zsh;'
+          sysexts: '1password-cli;1password-gui;bandwhich;bitwarden;btop;bwm-ng;chromium;cilium-cli;cloud-hypervisor;distrobox;docker-ce;emacs;erofs-utils;fd-find;firefox;fish;fuse2;gdb;git-absorb;git-delta;google-chrome;helix;htop;igt-gpu-tools;incus;iotop;iwd;just;keepassxc;krb5-workstation;kubernetes-1.29;kubernetes-1.30;kubernetes-1.31;kubernetes-1.32;kubernetes-cri-o-1.29;kubernetes-cri-o-1.30;kubernetes-cri-o-1.31;kubernetes-cri-o-1.32;libvirtd;libvirtd-desktop;microsoft-edge;moby-engine;mullvad-vpn;neovim;openh264;openssl;python3;ripgrep;semanage;source-foundry-hack-fonts;steam-devices;strace;tree;vim;virtctl;vscode;vscodium;wasmtime;wireguard-tools;youki;zoxide;zsh;'
