@@ -7,13 +7,13 @@ env:
 on:
   pull_request:
     branches:
-      - main
+      - "main"
     paths:
       - '.github/Containerfile.buildroot'
       - '.github/workflows/buildroot.yml'
   push:
     branches:
-      - main
+      - "main"
     paths:
       - '.github/Containerfile.buildroot'
       - '.github/workflows/buildroot.yml'
