@@ -372,6 +372,12 @@ inputs target arch=arch:
         sha256sum *.rpm >> ../inputs
         cd ..
     fi
+    # Store the hashes of all the files added to the sysext
+    if [[ -n "{{files}}" ]]; then
+        for f in {{files}}; do
+            find ${f} -type f | sort -h | xargs sha256sum >> ./inputs
+        done
+    fi
     # Make sure that we have an inputs file in all cases
     touch ./inputs
 
@@ -393,8 +399,6 @@ setup-rootfs target arch=arch:
     fi
 
     version_id="$(cat ./version_id)"
-    # Post process architecture to match systemd architecture list
-    arch="$(echo {{arch}} | sed 's/_/-/g')"
 
     mkdir rootfs
     cd rootfs
@@ -425,6 +429,9 @@ setup-rootfs target arch=arch:
         done
         } | ${SUDO} tee "usr/lib/systemd/system/multi-user.target.d/10-{{name}}-sysext.conf" > /dev/null
     fi
+
+    # Post process architecture to match systemd architecture list
+    arch="$(echo {{arch}} | sed 's/_/-/g')"
 
     echo "➡️ Setting up extension config file"
     ${SUDO} install -d -m0755 usr/lib/extension-release.d
@@ -481,10 +488,6 @@ install-files:
     else
         SUDO="sudo"
     fi
-
-    for f in {{files}}; do
-        find ${f} -type f | sort -h | xargs sha256sum >> ./inputs
-    done
 
     cd rootfs
 
