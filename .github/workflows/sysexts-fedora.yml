@@ -35,7 +35,7 @@ jobs:
       IMAGE: "quay.io/fedora-ostree-desktops/base-atomic:41"
     steps:
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "Setup artifacts and dnf cache directories"
         run: |
@@ -361,7 +361,7 @@ jobs:
       IMAGE: "quay.io/fedora-ostree-desktops/base-atomic:42"
     steps:
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "Setup artifacts and dnf cache directories"
         run: |
@@ -687,7 +687,7 @@ jobs:
       IMAGE: "quay.io/fedora/fedora-coreos:stable"
     steps:
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "Setup artifacts and dnf cache directories"
         run: |
@@ -779,7 +779,7 @@ jobs:
       IMAGE: "quay.io/fedora/fedora-coreos:next"
     steps:
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "Setup artifacts and dnf cache directories"
         run: |
@@ -871,7 +871,7 @@ jobs:
       IMAGE: "quay.io/fedora-ostree-desktops/base-atomic:41"
     steps:
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "Setup artifacts and dnf cache directories"
         run: |
@@ -1167,7 +1167,7 @@ jobs:
       IMAGE: "quay.io/fedora-ostree-desktops/base-atomic:42"
     steps:
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "Setup artifacts and dnf cache directories"
         run: |
@@ -1457,7 +1457,7 @@ jobs:
       IMAGE: "quay.io/fedora/fedora-coreos:stable"
     steps:
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "Setup artifacts and dnf cache directories"
         run: |
@@ -1543,7 +1543,7 @@ jobs:
       IMAGE: "quay.io/fedora/fedora-coreos:next"
     steps:
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "Setup artifacts and dnf cache directories"
         run: |
@@ -1640,7 +1640,7 @@ jobs:
     if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     steps:
       - name: "Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "Mark directory as safe"
         run: |
